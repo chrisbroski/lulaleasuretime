@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<title>LuLaLeasure Time</title>
+<link href='https://fonts.googleapis.com/css?family=Maven+Pro' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="inc/main.css">
+</head>
+
+<body>
+
+<nav id="menu">
+<!--#include virtual="inc/nav.pht" -->
+</nav>
+
+<article>
+<h1><img src="inc/lulaleasuretime.png" alt="LuLaLeasure Time"></h1>
+<h2>LuLaLeasure Time with <a href="mailto:lulaleasuretime@gmail.com">Stacy Leasure</a></h2>
+</article>

@@ -1,0 +1,26 @@
+html {padding: 10px 10px 200px; font-family: "Maven Pro"; color: #888b8d; }
+body {margin: 0 auto; width: 1100px; }
+a {color: #8bb8e8; }
+a:visited {color: #9595d2; }
+a:hover {color: #64ccc9; }
+
+article {padding: 10px 10px 0 0; }
+article h1 {text-align: center; }
+article h2 {text-align: center; }
+
+/* Mobile layout */
+@media (max-width: 800px) {
+    body {width: auto; }
+    article h1 img {width: 251.75px; }
+}
+
+/*
+#fed141 - yellow
+#ff9d68 - orange
+#f97599 - pink
+#dd7fd3 - fuchsia
+#9595d2 - purple
+#8bb8e8 - blue
+#64ccc9 - green
+#888b8d - gray
+*/
