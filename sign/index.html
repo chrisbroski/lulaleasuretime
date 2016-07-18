@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>LuLaRoe Sign - LuLaLeasure Time</title>
+<script src="/lib/dialog-polyfill.js"></script>
+<link rel="stylesheet" type="text/css" href="/lib/dialog-polyfill.css">
+<style>
+@font-face {
+    font-family: "exljbris";
+    src: url("/lib/exljbris - MuseoSans-500.otf") format("opentype");
+}
+@font-face {
+    font-family: "maven";
+    src: url("/lib/MavenProLight-300.otf") format("opentype");
+}
+@font-face {
+    font-family: "steelfish";
+    src: url("/lib/steelfish rg.ttf") format("opentype");
+}
+
+* {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "exljbris";
+}
+
+/* To make the click event the entire window */
+html, body, article {
+    height: 100%;
+}
+
+a, a:visited {
+    color: #8bb8e8;
+}
+a:hover {
+    color: #9595d2;
+}
+
+h1 {
+    padding: 0 0 0.05em 0;
+    color: #fff;
+    font-family: steelfish;
+    font-size: 220px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: normal;
+    line-height: 1;
+}
+h1 span {
+    padding-left: 0.2em;
+    font-family: steelfish;
+}
+h2 {
+    position: absolute;
+    top: 40%; left: 50%;
+    text-align: center;
+    font-family: steelfish;
+    font-size: 240px;
+    font-weight: normal;
+    width: 400px;
+    margin-left: -200px;
+}
+h3 {
+    font-size: 46px;
+    font-family: maven;
+    width: 100%;
+    position: fixed;
+    left: 0; bottom: 0.3em;
+    text-align: center;
+    color: #888B8D;
+}
+nav {
+    margin: 0; padding: 0;
+    position: absolute;
+    left: 0; bottom: 0;
+    background: #fff;
+    width: 0;
+    transition: width 0.5s, padding 0.5s;
+    overflow: hidden;
+    box-shadow: 4px 2px 16px rgba(0, 0, 0, 0.5);
+}
+menu {
+    margin: 0; padding: 16px;
+    list-style-type: none;
+    width: 512px;
+    overflow: auto;
+}
+menu li {
+    padding: 4px;
+    text-transform: capitalize;
+    font-size: 24px;
+    width: 240px;
+    float: left;
+}
+
+article.yellow h1 {
+    background: #fed141;
+}
+article.orange h1 {
+    background: #ff9d6e;
+}
+article.pink h1 {
+    background: #f67599;
+}
+article.fuchsia h1 {
+    background: #dd7fd3;
+}
+article.purple h1 {
+    background: #9595d2;
+}
+article.blue h1 {
+    background: #8bb8e8;
+}
+article.green h1 {
+    background: #64ccc9;
+}
+article.grey h1 {
+    background: #888b8d;
+}
+
+article.yellow h2 {
+    color: #fed141;
+}
+article.orange h2 {
+    color: #ff9d6e;
+}
+article.pink h2 {
+    color: #f67599;
+}
+article.fuchsia h2 {
+    color: #dd7fd3;
+}
+article.purple h2 {
+    color: #9595d2;
+}
+article.blue h2 {
+    color: #8bb8e8;
+}
+article.green h2 {
+    color: #64ccc9;
+}
+article.grey h2 {
+    color: #888b8d;
+}
+
+dialog {
+    padding: 32px;
+    border: 0 none;
+    width: 400px;
+    box-shadow: 8px 4px 16px rgba(0, 0, 0, 0.5);
+}
+dialog h4 {
+    text-transform: capitalize;
+    font-size: 32px;
+}
+dialog p {
+    margin: 2em 0;
+    text-align: center;
+}
+dialog p a {
+    margin-right: 0.4em;
+    font-family: maven;
+    font-size: 24px;
+    text-transform: uppercase;
+    outline: 0 none;
+}
+dialog form {
+    text-align: right;
+}
+dialog button {
+    border: 0 none;
+    background: transparent none;
+    text-transform: uppercase;
+    font-size: 18px;
+}
+
+</style>
+</head>
+
+<body>
+
+<article>
+<h1></h1>
+<h2></h2>
+<h3>LuLaRoe Stacy Leasure-Broski</h3>
+</article>
+
+<nav><menu></menu></nav>
+
+<dialog>
+    <h4>Select Size</h4>
+    <p></p>
+    <form method="dialog">
+        <button>Close</button>
+    </form>
+</dialog>
+
+<script src="styles.js"></script>
+<script>
+function Q$(name) {
+    var reQs, val;
+    reQs = new RegExp("[\\?&]" + name + "=([^&#]*)", "i");
+    val = reQs.exec(window.parent.location.search);
+    if (val) {
+        return decodeURIComponent(val[1]);
+    }
+    return "";
+}
+
+function formatStyle(style) {
+    if (style === 'kids_l/xl') {
+        style = 'kids_l/xL';
+    }
+    return style.replace(/\_/gi, ' ');
+}
+
+function displaySizeSelector(style) {
+    var selectorTitle, sizeList, li, dialog, link;
+
+    selectorTitle = document.querySelector('h4');
+    selectorTitle.textContent = 'Select ' + formatStyle(style) + ' size';
+
+    sizeList = document.querySelector('dialog p');
+    sizeList.innerHTML = '';
+
+    styleData[style].sizes.forEach(function (size) {
+        link = document.createElement('a');
+        link.textContent = size;
+        link.href = "?style=" + encodeURIComponent(style) + "&size=" + size;
+        sizeList.appendChild(link);
+        sizeList.appendChild(document.createTextNode(' '));
+    });
+
+    dialog = document.querySelector('dialog');
+    dialogPolyfill.registerDialog(dialog);
+    dialog.showModal();
+}
+
+function populateMenu() {
+    var styleList = document.querySelector('menu'),
+        style,
+        styleItem,
+        signLink;
+
+    for (style in styleData) {
+        if (styleData.hasOwnProperty(style)) {
+            styleItem = document.createElement('li');
+            signLink = document.createElement('a');
+            signLink.textContent = formatStyle(style);
+            signLink.href = '?style=' + encodeURIComponent(style);// + '&size=xl';
+            signLink.setAttribute('data-style', style);
+
+            if (styleData[style].sizes) {
+                signLink.onclick = function (e) {
+                    e.preventDefault();
+                    displaySizeSelector(e.target.getAttribute('data-style'))
+                };
+            }
+
+            styleItem.appendChild(signLink);
+            styleList.appendChild(styleItem);
+        }
+    }
+}
+
+window.onload = function () {
+    var style, size, price, iColor;
+
+    iColor = Math.floor(Math.random() * lularoeColors.length);
+    document.querySelector('article').className = lularoeColors[iColor];
+
+    style = Q$('style').toLowerCase() || 'patrick';
+    if (Q$('price')) {
+        price = Number(Q$('price'));
+    } else {
+        if (styleData[style]) {
+            price = styleData[style].price;
+        }
+    }
+
+    document.querySelector('h1').textContent = formatStyle(style);
+    if (Q$('size')) {
+        size = document.createElement('span');
+        size.textContent = Q$('size');
+        document.querySelector('h1').appendChild(size);
+    }
+    if (price) {
+        document.querySelector('h2').innerHTML = '$' + price.toFixed();
+    } else {
+        document.querySelector('h2').innerHTML = '';
+    }
+    populateMenu();
+    document.querySelector('article').onclick = function () {
+        var nav = document.querySelector('nav');
+        if (!nav.style.width || nav.style.width == '0px') {
+            nav.style.width = '512px';
+        } else {
+            nav.style.width = '0px';
+        }
+    };
+}
+</script>
