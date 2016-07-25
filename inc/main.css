@@ -1,17 +1,82 @@
-html {padding: 10px 10px 200px; font-family: "Maven Pro"; color: #888b8d; }
-body {margin: 0 auto; width: 1100px; }
+@font-face {
+    font-family: "exljbris";
+    src: url("/lib/exljbris - MuseoSans-500.otf") format("opentype");
+}
+@font-face {
+    font-family: "maven";
+    src: url("/lib/MavenProLight-300.otf") format("opentype");
+}
+@font-face {
+    font-family: "steelfish";
+    src: url("/lib/steelfish rg.ttf") format("opentype");
+}
+
+html {padding: 10px 10px 200px; font-family: exljbris; color: #888b8d; }
+body {margin: 0 auto; width: 820px; }
 a {color: #8bb8e8; }
 a:visited {color: #9595d2; }
 a:hover {color: #64ccc9; }
 
-article {padding: 10px 10px 0 0; }
+header h2 {
+    margin: 0 0 32px;
+    text-align: center
+}
+
+article {padding: 0; }
 article h1 {text-align: center; }
 article h2 {text-align: center; }
+
+section {
+    float: right;
+    width: 400px;
+}
+section h3 {
+    margin: 0;
+    font-family: steelfish;
+    font-size: 48px;
+    font-weight: normal;
+    letter-spacing: 0.04em;
+    color: #9595d2;
+}
+section p {
+    margin: 12px 0;
+    padding-right: 32px;
+    font-family: steelfish;
+    font-size: 24px;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+section p a {
+    padding: 8px 16px;
+    display: block;
+    background: #888b8d;
+    text-decoration: none;
+    color: #fff;
+}
+section p a:visited, section p a:hover {
+    color: #fff;
+}
+section p a i {
+    float: left;
+}
+#email a {background: #64ccc9; }
+#facebook a {background: #8bb8e8; }
+#instagram a {background: #dd7fd3; }
+#periscope a {background: #9595d2; }
+#youtube a {background: #f97599; }
+
+section img {
+    width: 100%;
+}
 
 /* Mobile layout */
 @media (max-width: 800px) {
     body {width: auto; }
-    article h1 img {width: 251.75px; }
+    header h2 {margin: 0; }
+    header h2 img {width: 250px; }
+    section {margin: 0 auto; float: none; width: auto; max-width: 400px; }
+    section h3 {text-align: center; }
+    section p {padding-right: 0; }
 }
 
 /*
