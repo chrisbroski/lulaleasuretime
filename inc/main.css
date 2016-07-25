@@ -65,6 +65,12 @@ section p a i {
 #periscope a {background: #9595d2; }
 #youtube a {background: #f97599; }
 
+#email a:hover {background: #ff9d68; }
+#facebook a:hover {background: #ff9d68; }
+#instagram a:hover {background: #ff9d68; }
+#periscope a:hover {background: #ff9d68; }
+#youtube a:hover {background: #ff9d68; }
+
 section img {
     width: 100%;
 }
