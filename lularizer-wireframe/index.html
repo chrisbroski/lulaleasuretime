@@ -1,0 +1,80 @@
+<!doctype html>
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<title>Lularize Wireframe</title>
+<style>
+* {box-sizing: border-box; }
+canvas {border: 1px solid #333; }
+</style>
+
+<article>
+<h1>LuLaRize</h1>
+<p><label>Style</label><select></select>
+
+<p><canvas width="450" height="400" id="preview"></canvas>
+<!--<p><img src="test.jpg">-->
+
+</article>
+
+<script>
+var colors = [
+    (254, 209, 65),  // yellow
+    (255, 157, 110), // orange
+    (246, 117, 153), // pink
+    (221, 127, 211), // fuschia
+    (149, 149, 210), // purple
+    (139, 184, 232), // blue
+    (100, 204, 201), // mint
+    (136, 139, 141)  // gray
+];
+
+var styleData = {
+    'joy': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
+    'tween': {'price': 23},
+    'tall_&_curvy': {'price': 25},
+    'kids_s/m': {'price': 23},
+    'sloan': {'price': 28, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'sarah': {'price': 70, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
+    'randy': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'perfect_t': {'price': 36, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'patrick': {'price': 40, 'sizes': ['m', 'l', 'xl', '2xl', '3xl']},
+    'one_size': {'price': 25},
+    'nicole': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'monroe': {'price': 48, 'sizes': ['s', 'l']},
+    'maxi': {'price': 42, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'madison': {'price': 48, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'kids_l/xl': {'price': 23},
+    'lucy': {'price': 52, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'lola': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'lindsay': {'price': 48, 'sizes': ['s', 'm', 'l']},
+    'kids_azure': {'price': 25, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'julia': {'price': 45, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'jordan': {'price': 65, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
+    'jill': {'price': 55, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'jade': {'price': 55, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
+    'irma': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'gracie': {'price': 28, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'dotdotsmile': {'price': 36, 'sizes': [2, '3/4', '5/6', 7, '8/10', '12/14']},
+    'classic_t': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'cassie': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'ana': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'amelia': {'price': 65, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'carly': {'price': 55, 'sizes': ['xs', 's', 'm']}
+};
+
+function load() {
+    console.log('loading');
+    var ctx = document.getElementById('preview').getContext('2d'),
+        img = new Image();
+    img.addEventListener("load", function() {
+      // execute drawImage statements here
+      ctx.drawImage(img, 0, 0, 300, 400);
+    }, false);
+    img.src = 'test.jpg'; // Set source path
+
+    console.log(img);
+}
+
+window.onload = load;
+
+</script>
