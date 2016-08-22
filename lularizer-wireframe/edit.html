@@ -1,0 +1,241 @@
+<!doctype html>
+<title>Lularize Wireframe</title>
+<style>
+* {box-sizing: border-box; }
+canvas {border: 1px solid #333; }
+#selectStyle {text-transform: capitalize; }
+
+@font-face {
+    font-family: "maven";
+    src: url("../lib/MavenProLight-300.otf") format("opentype");
+}
+label {font-family: maven; }
+@font-face {
+    font-family: "steelfish";
+    src: url("../lib/steelfish rg.ttf") format("opentype");
+}
+h1 {font-family: steelfish; }
+
+#colorYellow {backgroud-color: #fed141; }
+#colorOrange {backgroud-color: #ff9d68; }
+#colorPink {backgroud-color: #f97599; }
+#colorFuchsia {backgroud-color: #dd7fd3; }
+#colorPurple {backgroud-color: #9595d2; }
+#colorBlue {backgroud-color: #8bb8e8; }
+#colorGreen {backgroud-color: #64ccc9; }
+#colorGray {backgroud-color: #888b8d; }
+</style>
+
+<article>
+<h1>LuLaRizer</h1>
+<p><label>Color</label>
+    <select id="selectColor">
+        <option value="#fed141" id="colorYellow">yellow
+        <option value="#ff9d68" id="colorOrange">orange
+        <option value="#f97599" id="colorPink">pink
+        <option value="#dd7fd3" id="colorFuchsia">fuchsia
+        <option value="#9595d2" id="colorPurple">purple
+        <option value="#8bb8e8" id="colorBlue">blue
+        <option value="#64ccc9" id="colorGreen">green
+        <option value="#888b8d" id="colorGray">gray
+    </select>
+<p><label>Style</label> <select id="selectStyle"></select>
+<p><label>Size</label> <select id="selectSize"></select>
+<p><label>Watermark</label><br> <input id="watermark" value="www.LuLaLeasureTime.com">
+
+<p><canvas width="450" height="400" id="preview"></canvas>
+
+</article>
+
+<script>
+var colors = [
+    (254, 209, 65),  // yellow
+    (255, 157, 110), // orange
+    (246, 117, 153), // pink
+    (221, 127, 211), // fuschia
+    (149, 149, 210), // purple
+    (139, 184, 232), // blue
+    (100, 204, 201), // mint
+    (136, 139, 141)  // gray
+];
+
+var styleData = {
+    'joy': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
+    'tween': {'price': 23},
+    'tall_&_curvy': {'price': 25},
+    'kids_s/m': {'price': 23},
+    'sloan': {'price': 28, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'sarah': {'price': 70, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
+    'randy': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'perfect_t': {'price': 36, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'patrick': {'price': 40, 'sizes': ['m', 'l', 'xl', '2xl', '3xl']},
+    'one_size': {'price': 25},
+    'nicole': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'monroe': {'price': 48, 'sizes': ['s', 'l']},
+    'maxi': {'price': 42, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'madison': {'price': 48, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'kids_l/xl': {'price': 23},
+    'lucy': {'price': 52, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'lola': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'lindsay': {'price': 48, 'sizes': ['s', 'm', 'l']},
+    'kids_azure': {'price': 25, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'julia': {'price': 45, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'jordan': {'price': 65, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
+    'jill': {'price': 55, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'jade': {'price': 55, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
+    'irma': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'gracie': {'price': 28, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'classic_t': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'cassie': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'ana': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'amelia': {'price': 65, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'carly': {'price': 55, 'sizes': ['xs', 's', 'm']}
+};
+
+function capitalizeEachWord(str) {
+    return str.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}
+
+function formatStyle(styleType) {
+    return styleType.replace(/_/g, ' ');
+}
+
+function buildSizeUI() {
+    var selSizes = document.getElementById('selectSize'),
+        selectedStyle = document.getElementById('selectStyle').value,
+        option;
+
+    selSizes.innerHTML = '';
+
+    if (styleData[selectedStyle].sizes) {
+        styleData[selectedStyle].sizes.forEach(function (size) {
+            option = document.createElement('option');
+            option.value = size;
+            option.textContent = formatStyle(size);
+            selSizes.appendChild(option);
+        });
+    } else {
+        selSizes.disabled = true;
+    }
+}
+
+function buildStyleUI() {
+    var selStyle = document.getElementById('selectStyle'),
+        option;
+
+    for (style in styleData) {
+        if (styleData.hasOwnProperty(style)) {
+            option = document.createElement('option');
+            option.value = style;
+            option.textContent = formatStyle(style);
+            selStyle.appendChild(option);
+        }
+    }
+
+    buildSizeUI();
+}
+
+function logo(ctx) {
+    // LuLaRoe Logo
+    ctx.beginPath();
+    ctx.lineWidth = 4.8;
+    ctx.strokeStyle = '#fed141';
+    ctx.rect(307, 258, 135, 135);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#ff9d68';
+    ctx.rect(318, 269, 113, 113);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#f97599';
+    ctx.rect(329, 280, 91, 91);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#dd7fd3';
+    ctx.rect(340, 291, 69, 69);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#9595d2';
+    ctx.rect(351, 302, 47, 47);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#8bb8e8';
+    ctx.rect(362, 313, 25, 25);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.strokeStyle = '#64ccc9';
+    ctx.rect(372.5, 323.5, 4, 4);
+    ctx.stroke();
+}
+
+function lularize(newStyle) {
+    if (newStyle) {
+        buildSizeUI();
+    }
+
+    var canvas = document.getElementById('preview'),
+        ctx = canvas.getContext('2d'),
+        img = new Image();
+
+    img.addEventListener("load", function() {
+        var color = document.getElementById('selectColor').value,
+            style = document.getElementById('selectStyle').value,
+            size = document.getElementById('selectSize').value;
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.textAlign = 'center';
+        ctx.font = '20px maven';
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, 0, 0, 300, 400);
+
+        // add watermark
+        ctx.fillStyle = 'black';
+        ctx.fillText(document.getElementById('watermark').value, 152, 392);
+        ctx.strokeStyle = color;
+        ctx.fillStyle = color;
+        ctx.fillText(document.getElementById('watermark').value, 150, 390);
+
+        ctx.fillRect(300, 0, 150, 65);
+        ctx.font = '44px steelfish';
+
+        if (size) {
+            ctx.fillText(size.toUpperCase(), 375, 130);
+            ctx.fillText('$' + styleData[style].price, 375, 200);
+        } else {
+            ctx.fillText('$' + styleData[style].price, 375, 130);
+        }
+
+        ctx.strokeStyle = 'white';
+        ctx.fillStyle = 'white';
+        ctx.font = '40px steelfish';
+        ctx.fillText(formatStyle(style).toUpperCase(), 375, 49);
+
+        logo(ctx);
+    }, false);
+    img.src = 'test.jpg'; // Set source path
+}
+
+function load() {
+    buildStyleUI();
+    document.getElementById('selectStyle').onchange = function () {lularize(true); };
+    document.getElementById('selectSize').onchange = lularize;
+    document.getElementById('selectColor').onchange = lularize;
+
+    lularize(true);
+}
+
+window.onload = load;
+
+</script>
