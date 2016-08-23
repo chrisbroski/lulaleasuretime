@@ -1,70 +1,86 @@
 <!doctype html>
 <title>Lularize Wireframe</title>
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<link rel="stylesheet" type="text/css" href="main.css">
 <style>
-* {box-sizing: border-box; }
-canvas {border: 1px solid #333; }
+h1 {font-size: 18px; }
+canvas {
+    border: 1px solid #333;
+    max-width: 100%;
+}
+article {padding-bottom: 64px; }
+#watermark {width: 100%; }
+p {margin: 0.5em 0; }
+footer p {margin: 1em 0; }
+
+#colors > div {
+    margin: 0 4px;
+    width: 20px; height: 20px;
+    display: inline-block;
+}
+#colors {padding-top: 2px;}
+.selectedColor {
+    box-shadow: 1px 1px 3px black;
+    position: relative;
+    top: -1px; left: -1px;
+}
+
 #selectStyle {text-transform: capitalize; }
 
-@font-face {
-    font-family: "maven";
-    src: url("../lib/MavenProLight-300.otf") format("opentype");
-}
-label {font-family: maven; }
-@font-face {
-    font-family: "steelfish";
-    src: url("../lib/steelfish rg.ttf") format("opentype");
-}
-h1 {font-family: steelfish; }
-
-#colorYellow {backgroud-color: #fed141; }
-#colorOrange {backgroud-color: #ff9d68; }
-#colorPink {backgroud-color: #f97599; }
-#colorFuchsia {backgroud-color: #dd7fd3; }
-#colorPurple {backgroud-color: #9595d2; }
-#colorBlue {backgroud-color: #8bb8e8; }
-#colorGreen {backgroud-color: #64ccc9; }
-#colorGray {backgroud-color: #888b8d; }
+#colorYellow {background-color: #fed141; }
+#colorOrange {background-color: #ff9d68; }
+#colorPink {background-color: #f97599; }
+#colorFuchsia {background-color: #dd7fd3; }
+#colorPurple {background-color: #9595d2; }
+#colorBlue {background-color: #8bb8e8; }
+#colorGreen {background-color: #64ccc9; }
+#colorGray {background-color: #888b8d; }
 </style>
 
 <article>
-<h1>LuLaRizer</h1>
-<p><label>Color</label>
-    <select id="selectColor">
-        <option value="#fed141" id="colorYellow">yellow
-        <option value="#ff9d68" id="colorOrange">orange
-        <option value="#f97599" id="colorPink">pink
-        <option value="#dd7fd3" id="colorFuchsia">fuchsia
-        <option value="#9595d2" id="colorPurple">purple
-        <option value="#8bb8e8" id="colorBlue">blue
-        <option value="#64ccc9" id="colorGreen">green
-        <option value="#888b8d" id="colorGray">gray
-    </select>
+<div id="colors">
+    <label>Color</label>
+    <div id="colorYellow" class="selectedColor"></div>
+    <div id="colorOrange"></div>
+    <div id="colorPink"></div>
+    <div id="colorFuchsia"></div>
+    <div id="colorPurple"></div>
+    <div id="colorBlue"></div>
+    <div id="colorGreen"></div>
+</div>
+
 <p><label>Style</label> <select id="selectStyle"></select>
-<p><label>Size</label> <select id="selectSize"></select>
+    <label>Size</label> <select id="selectSize"></select>
 <p><label>Watermark</label><br> <input id="watermark" value="www.LuLaLeasureTime.com">
 
 <p><canvas width="450" height="400" id="preview"></canvas>
 
+<footer>
+<p>
+<button>Cancel</button>
+<button onclick="save()">Add to Inventory</button>
+</footer>
+
 </article>
 
 <script>
-var colors = [
-    (254, 209, 65),  // yellow
-    (255, 157, 110), // orange
-    (246, 117, 153), // pink
-    (221, 127, 211), // fuschia
-    (149, 149, 210), // purple
-    (139, 184, 232), // blue
-    (100, 204, 201), // mint
-    (136, 139, 141)  // gray
-];
+var colors = {
+    'colorYellow': '#fed141',
+    'colorOrange': '#ff9d68',
+    'colorPink': '#f97599',
+    'colorFuchsia': '#dd7fd3',
+    'colorPurple': '#9595d2',
+    'colorBlue': '#8bb8e8',
+    'colorGreen': '#64ccc9',
+    'colorGray': '#888b8d'
+}, color = '#fed141';
 
 var styleData = {
     'joy': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
     'tween': {'price': 23},
     'tall_&_curvy': {'price': 25},
     'kids_s/m': {'price': 23},
-    'sloan': {'price': 28, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'sloan': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
     'sarah': {'price': 70, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
     'randy': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
     'perfect_t': {'price': 36, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
@@ -78,13 +94,13 @@ var styleData = {
     'lucy': {'price': 52, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
     'lola': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
     'lindsay': {'price': 48, 'sizes': ['s', 'm', 'l']},
-    'kids_azure': {'price': 25, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'kids_azure': {'price': 25, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
     'julia': {'price': 45, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
     'jordan': {'price': 65, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
     'jill': {'price': 55, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
     'jade': {'price': 55, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
     'irma': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'gracie': {'price': 28, 'sizes': [2, 4, 6, 8, 10, 12, 14]},
+    'gracie': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
     'classic_t': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
     'cassie': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
     'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
@@ -187,8 +203,8 @@ function lularize(newStyle) {
         img = new Image();
 
     img.addEventListener("load", function() {
-        var color = document.getElementById('selectColor').value,
-            style = document.getElementById('selectStyle').value,
+        //var //color = document.getElementById('selectColor').value,
+        var style = document.getElementById('selectStyle').value,
             size = document.getElementById('selectSize').value;
 
         ctx.lineWidth = 1;
@@ -227,13 +243,86 @@ function lularize(newStyle) {
     img.src = 'test.jpg'; // Set source path
 }
 
+function save() {
+    var bitmapData = document.getElementById('preview').toDataURL(),
+        invString,
+        invObj,
+        style = document.getElementById('selectStyle').value;
+
+    invString = localStorage.getItem('inventory');
+    if (!invString) {
+        invObj = {};
+    } else {
+        invObj = JSON.parse(invString);
+    }
+
+    if (!invObj[style]) {
+        invObj[style] = [];
+    }
+    invObj[style].push(bitmapData);
+    localStorage.setItem('inventory', JSON.stringify(invObj));
+}
+
+function getEventTarget(e) {
+    var targ;
+    targ = e.target || e.srcElement;
+    if (targ.nodeType === 3) { // defeat Safari bug
+        targ = targ.parentNode;
+    }
+    return targ;
+}
+
+function addEvent(el, evType, fn, bubble) {
+    bubble = bubble || false;
+    if (el.addEventListener) {
+        el.addEventListener(evType, fn, bubble);
+    } else if (el.attachEvent) {
+        el.attachEvent("on" + evType, fn);
+    }
+}
+
+function touchclick(el, func, bubble) {
+    bubble = !!bubble;
+    if ('ontouchstart' in window || 'onmsgesturechange' in window) {
+        el.addEventListener('touchstart', func, bubble);
+    } else {
+        addEvent(el, 'click', func, bubble);
+    }
+}
+
+function isColorButton(el) {
+    var colorIds = ['colorYellow', 'colorOrange', 'colorPink', 'colorFuchsia', 'colorPurple', 'colorBlue', 'colorGreen', 'colorGray'];
+    if (colorIds.indexOf(el.id) > -1) {
+        return true;
+    }
+    return false;
+}
+
+function changeColor(e) {
+    var targ = getEventTarget(e);
+    if (isColorButton(targ)) {
+        document.getElementById('colorYellow').className = '';
+        document.getElementById('colorOrange').className = '';
+        document.getElementById('colorPink').className = '';
+        document.getElementById('colorFuchsia').className = '';
+        document.getElementById('colorPurple').className = '';
+        document.getElementById('colorBlue').className = '';
+        document.getElementById('colorGreen').className = '';
+
+        targ.className = 'selectedColor'
+        color = colors[targ.id];
+        lularize();
+    }
+}
+
 function load() {
     buildStyleUI();
     document.getElementById('selectStyle').onchange = function () {lularize(true); };
     document.getElementById('selectSize').onchange = lularize;
-    document.getElementById('selectColor').onchange = lularize;
+    touchclick(document.getElementById('colors'), changeColor);
+    document.getElementById('watermark').onchange = lularize;
 
-    lularize(true);
+    window.setTimeout(function () {lularize(true); }, 50);
 }
 
 window.onload = load;

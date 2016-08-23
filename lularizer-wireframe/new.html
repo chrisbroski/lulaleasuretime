@@ -1,27 +1,28 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <title>Lularizer Wireframe</title>
+<link rel="stylesheet" type="text/css" href="main.css">
 <style>
-* {box-sizing: border-box; }
-canvas {border: 1px solid #333; }
-
-@font-face {
-    font-family: "maven";
-    src: url("../lib/MavenProLight-300.otf") format("opentype");
+html, footer {
+    background: black;
 }
-label, h2, p {font-family: maven; }
-@font-face {
-    font-family: "steelfish";
-    src: url("../lib/steelfish rg.ttf") format("opentype");
+#fakeCamera {max-width: 100%; }
+#photoGuide {
+    position: absolute;
+    margin-left: -50px;
+    margin-top: -100px;
+    top: 50%; left: 50%;
+    border: 1px dashed yellow;
+    width: 100px; height: 100px;
 }
-h1 {font-family: steelfish; }
 </style>
 
 <article>
-<h1>LuLaRizer</h1>
-<h2><a href="">Take Photo</a></h2>
-<h2><a href="">Select from Album</a></h2>
+<img src="test.jpg" id="fakeCamera" alt="photo">
+<div id="photoGuide"></div>
 </article>
+
+<footer><p><button onclick="history.back()">Cancel</button><button onclick="location='edit'">Take photo</button></footer>
 
 <script>
 
