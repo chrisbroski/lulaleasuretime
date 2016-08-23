@@ -1,0 +1,24 @@
+* {box-sizing: border-box; }
+
+@font-face {
+    font-family: "maven";
+    src: url("../lib/MavenProLight-300.otf") format("opentype");
+}
+label, h2, p {font-family: maven; }
+@font-face {
+    font-family: "steelfish";
+    src: url("../lib/steelfish rg.ttf") format("opentype");
+}
+h1 {font-family: steelfish; font-size: 36px; margin: 0;}
+button {
+    text-transform: uppercase;
+    font-size: 16px;
+}
+img {max-width: 100%; }
+footer {
+    position: fixed;
+    left: 0; bottom: 0;
+    height: 64px; width: 100%;
+    background: #fff;
+    text-align: center;
+}
