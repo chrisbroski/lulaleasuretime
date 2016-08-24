@@ -1,24 +1,43 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Lularizer Wireframe</title>
-<link rel="stylesheet" type="text/css" href="main.css">
+<link rel="stylesheet" href="mdl/material.lime-pink.min.css">
+<script src="mdl/material.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
 <style>
 
 </style>
+<body>
 
-<article>
-<h1>LuLaRizer</h1>
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
-<h2>Add Inventory</h2>
-<p><button onclick="location='new'">From Camera</button>
-<p><button>From Collection</button>
+<header class="mdl-layout__header">
+<div class="mdl-layout__header-row">
+<span class="mdl-layout__title"><a href="/lularizer-wireframe/">LuLaRizer</a></span>
+</div>
+</header>
 
-<h2>Manage Inventory</h2>
-<p><button onclick="location='inventory'">Edit and Delete</button>
-<p><button>Upload to Facebook</button>
+<div class="mdl-layout__drawer">
+<span class="mdl-layout__title">LuLaRizer</span>
+<nav class="mdl-navigation">
+<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
+<a class="mdl-navigation__link" href="#" onclick="return false; ">Add From Collection</a>
+<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
+<a class="mdl-navigation__link" href="#" onclick="return false; ">Inventory Audit</a>
+<a class="mdl-navigation__link" href="#" onclick="return false; ">Upload to Facebook</a>
+</nav>
+</div>
 
-</article>
+<main class="mdl-layout__content">
+<div class="mdl-card mdl-shadow--4dp">
+<div class="mdl-card__media"><img src="stacy_emily_flowers.jpg"></div>
+<div class="mdl-card__supporting-text">
+The LuLaRizer helps LuLaRoe fashion consultants share and manage inventory with clear, high-quality photos.
+</div>
+</div>
+<a class="mdl-button mdl-button--fab mdl-button--colored mdl-shadow--8dp" href="new" onclick="location='new'; return false; "><i class="material-icons">camera_enhance</i></a>
+</main>
 
-<script>
-
-</script>
+</div>

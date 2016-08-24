@@ -1,0 +1,42 @@
+* {box-sizing: border-box; }
+
+@font-face {
+    font-family: "maven";
+    src: url("/lib/MavenProLight-300.otf") format("opentype");
+}
+@font-face {
+    font-family: "steelfish";
+    src: url("/lib/steelfish rg.ttf") format("opentype");
+}
+
+.mdl-layout__title {
+    font-family: steelfish;
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.mdl-layout__title a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.mdl-card {
+    margin: 8px;
+    display: block;
+    width: auto; height: auto;
+    min-height: auto;
+}
+.mdl-card__media {
+    text-align: center;
+}
+.mdl-card__media img {
+    width: 100%;
+    max-width: 400px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+}
+.mdl-button--fab {
+    margin: -32px 32px 0 0;
+    float: right;
+    z-index: 1;
+}
