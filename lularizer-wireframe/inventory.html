@@ -1,7 +1,12 @@
 <!doctype html>
 <title>Lularize Wireframe</title>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
-<link rel="stylesheet" type="text/css" href="main.css">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Inventory</title>
+<link rel="stylesheet" href="mdl/material.lime-pink.min.css">
+<script src="mdl/material.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
 <style>
 #inventory img {width: 90px; margin: 4px; }
 h3 {
@@ -15,7 +20,7 @@ h3 {
 }
 </style>
 
-<article>
+<!--<article>
 <h1><a href="/lularizer-wireframe/">LuLaRizer</a></h1>
 <div id="inventory"></div>
 
@@ -25,7 +30,30 @@ h3 {
 <button>delete</button>
 </footer>
 
-</article>
+</article>-->
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+
+<header class="mdl-layout__header">
+<div class="mdl-layout__header-row">
+<span class="mdl-layout__title"><a href="/lularizer-wireframe/">LuLaRizer</a></span>
+</div>
+</header>
+
+<div class="mdl-layout__drawer">
+<span class="mdl-layout__title">LuLaRizer</span>
+<nav class="mdl-navigation">
+<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
+<a class="mdl-navigation__link" href="#" onclick="return false; ">Add From Collection</a>
+<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
+<a class="mdl-navigation__link" href="#" onclick="return false; ">Inventory Audit</a>
+<a class="mdl-navigation__link" href="#" onclick="return false; ">Upload to Facebook</a>
+</nav>
+</div>
+
+<main class="mdl-layout__content" id="inventory"></main>
+
+</div>
 
 <script>
 var invObj;
@@ -96,6 +124,8 @@ function selectPhoto(e) {
 function loadPhotos() {
     var invString = localStorage.inventory,
         invList = document.getElementById('inventory'),
+        card,
+        cardTitle,
         photo,
         img,
         header;
@@ -107,14 +137,21 @@ function loadPhotos() {
 
     for (style in invObj) {
         if (invObj.hasOwnProperty(style)) {
+            card = document.createElement('div');
+            card.className = 'mdl-card mdl-shadow--4dp';
+            cardTitle = document.createElement('div');
+            cardTitle.className = 'mdl-card__title';
             header = document.createElement('h3');
+            header.className = 'mdl-card__title-text';
             header.textContent = style;
-            invList.appendChild(header);
+            cardTitle.appendChild(header);
+            card.appendChild(cardTitle);
             invObj[style].forEach(function (photo) {
                 img = document.createElement('img');
                 img.src = photo;
-                invList.appendChild(img);
+                card.appendChild(img);
             });
+            invList.appendChild(card);
         }
     }
 }
