@@ -1,7 +1,7 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Manage Inventory</title>
+<title>Upload</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -25,18 +25,18 @@ h3 {
 
 <header class="mdl-layout__header">
 <div class="mdl-layout__header-row">
-<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Manage Inventory</a></span>
+<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Upload</a></span>
 </div>
 </header>
 
 <div class="mdl-layout__drawer">
 <span class="mdl-layout__title">LuLaRizer</span>
 <nav class="mdl-navigation">
-<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
-<a class="mdl-navigation__link" href="#" onclick="location='collection'; return false; ">Add From Collection</a>
-<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
-<a class="mdl-navigation__link" href="#" onclick="location='audit'; return false; ">Inventory Audit</a>
-<a class="mdl-navigation__link" href="#" onclick="location='upload'; return false; ">Upload to Facebook</a>
+<a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
+<a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
+<a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
+<a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
+<a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -44,39 +44,9 @@ h3 {
 
 </div>
 
+<script src="main.js"></script>
 <script>
 var invObj;
-
-function getEventTarget(e) {
-    var targ;
-    targ = e.target || e.srcElement;
-    if (targ.nodeType === 3) { // defeat Safari bug
-        targ = targ.parentNode;
-    }
-    return targ;
-}
-
-function addEvent(el, evType, fn, bubble) {
-    bubble = bubble || false;
-    if (el.addEventListener) {
-        el.addEventListener(evType, fn, bubble);
-    } else if (el.attachEvent) {
-        el.attachEvent("on" + evType, fn);
-    }
-}
-
-function touchclick(el, func, bubble) {
-    bubble = !!bubble;
-    if ('ontouchstart' in window || 'onmsgesturechange' in window) {
-        el.addEventListener('touchstart', func, bubble);
-    } else {
-        addEvent(el, 'click', func, bubble);
-    }
-}
-
-function formatStyle(styleType) {
-    return styleType.replace(/_/g, ' ');
-}
 
 function oneSelected() {
     var selectedPhotos = document.querySelectorAll('#inventory img'),

@@ -17,142 +17,269 @@ h3 {
     position: relative;
     top: -1px; left: -1px;
 }
+
+#markSoldDeleted, #moveCurrent, #cleanUpAll, #cleanUpSelected, #moveDeletedCurrent {
+    display: none;
+}
+
 </style>
 
 <body>
 
-<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header mdl-tabs mdl-js-tabs">
 
 <header class="mdl-layout__header">
 <div class="mdl-layout__header-row">
-<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Manage Inventory</a></span>
+<span class="mdl-layout__title">Manage Inventory</span>
 </div>
 </header>
 
 <div class="mdl-layout__drawer">
 <span class="mdl-layout__title">LuLaRizer</span>
 <nav class="mdl-navigation">
-<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
-<a class="mdl-navigation__link" href="#" onclick="location='collection'; return false; ">Add From Collection</a>
-<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
-<a class="mdl-navigation__link" href="#" onclick="location='audit'; return false; ">Inventory Audit</a>
-<a class="mdl-navigation__link" href="#" onclick="location='upload'; return false; ">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
-<main class="mdl-layout__content" id="inventory"></main>
+<main class="mdl-layout__content" id="inventory">
+<div class="mdl-tabs__tab-bar">
+<a class="mdl-tabs__tab is-active" href="#inventory-panel">Current</a>
+<a class="mdl-tabs__tab" href="#sold-panel">Sold</a>
+<a class="mdl-tabs__tab" href="#deleted-panel">Deleted</a>
+</div>
+<div class="mdl-tabs__panel is-active" id="inventory-panel"></div>
+<div class="mdl-tabs__panel" id="sold-panel"></div>
+<div class="mdl-tabs__panel" id="deleted-panel"></div>
+</main>
 
 </div>
 
+<footer>
+    <button class="mdl-button" id="markDeleted" disabled="disabled">Delete</button>
+    <button class="mdl-button" id="markSoldDeleted" disabled="disabled">Delete</button>
+    <button class="mdl-button" id="markSold" disabled="disabled">Mark as Sold</button>
+    <button class="mdl-button" id="moveCurrent" disabled="disabled">Restore to Current</button>
+
+    <button class="mdl-button" id="moveDeletedCurrent" disabled="disabled">Restore to Current</button>
+    <button class="mdl-button" id="cleanUpAll">Clean Up All</button>
+    <button class="mdl-button" id="cleanUpSelected">Clean Up Selected</button>
+</footer>
+
+<script src="main.js"></script>
 <script>
-var invObj;
+function activePanel() {
+    var activePanel = document.querySelector('.mdl-tabs__panel.is-active');
+    return activePanel.id.slice(0, activePanel.id.indexOf('-'));
+}
 
-function getEventTarget(e) {
-    var targ;
-    targ = e.target || e.srcElement;
-    if (targ.nodeType === 3) { // defeat Safari bug
-        targ = targ.parentNode;
+function cleanAll() {
+    var deleted = getLocalStorageJSON('deleted'), style;
+    for (style in deleted) {
+        if (deleted.hasOwnProperty(style)) {
+            delete deleted[style];
+        }
     }
-    return targ;
+    localStorage.setItem('deleted', JSON.stringify(deleted));
+    loadPhotos('deleted');
 }
 
-function addEvent(el, evType, fn, bubble) {
-    bubble = bubble || false;
-    if (el.addEventListener) {
-        el.addEventListener(evType, fn, bubble);
-    } else if (el.attachEvent) {
-        el.attachEvent("on" + evType, fn);
-    }
-}
+function cleanSelected() {
+    var type = activePanel(),
+        selectedPhotos = document.querySelectorAll('#deleted-panel img.selected'),
+        fromObj = getLocalStorageJSON('deleted'),
+        ii;
 
-function touchclick(el, func, bubble) {
-    bubble = !!bubble;
-    if ('ontouchstart' in window || 'onmsgesturechange' in window) {
-        el.addEventListener('touchstart', func, bubble);
-    } else {
-        addEvent(el, 'click', func, bubble);
-    }
-}
+    [].forEach.call(selectedPhotos, function(el) {
+        var style = el.parentElement.getAttribute('data-style');
+        fromObj[style][el.getAttribute('data-index')] = '';
+    });
 
-function formatStyle(styleType) {
-    return styleType.replace(/_/g, ' ');
-}
-
-function oneSelected() {
-    var selectedPhotos = document.querySelectorAll('#inventory img'),
-        ii,
-        len,
-        countSelected = 0;
-
-    len = selectedPhotos.length;
-    for (ii = 0; ii < len; ii += 1) {
-        if (selectedPhotos[ii].className === 'selected') {
-            countSelected += 1;
+    // clean up blank photo data
+    for (style in fromObj) {
+        if (fromObj.hasOwnProperty(style)) {
+            for (ii = fromObj[style].length; ii >= 0; ii -= 1) {
+                if (!fromObj[style][ii]) {
+                    fromObj[style].splice(ii, 1);
+                }
+            }
         }
     }
 
-    if (countSelected === 1) {
-        return true;
+    localStorage.setItem('deleted', JSON.stringify(fromObj));
+    loadPhotos('deleted');
+}
+
+function movePhoto(from, to) {
+    var type = activePanel(),
+        selectedPhotos = document.querySelectorAll('#' + from + '-panel img.selected'),
+        fromObj = getLocalStorageJSON(from),
+        toObj = getLocalStorageJSON(to),
+        ii;
+
+    [].forEach.call(selectedPhotos, function(el) {
+        var style = el.parentElement.getAttribute('data-style');
+
+        if (!toObj[style]) {
+            toObj[style] = [];
+        }
+        toObj[style].push(el.src);
+        fromObj[style][el.getAttribute('data-index')] = '';
+    });
+
+    // clean up blank photo data
+    for (style in fromObj) {
+        if (fromObj.hasOwnProperty(style)) {
+            for (ii = fromObj[style].length; ii >= 0; ii -= 1) {
+                if (!fromObj[style][ii]) {
+                    fromObj[style].splice(ii, 1);
+                }
+            }
+        }
     }
-    return false;
+
+    // save to localstorage
+    localStorage.setItem(from, JSON.stringify(fromObj));
+    localStorage.setItem(to, JSON.stringify(toObj));
+
+    // update view
+    loadPhotos(from);
+    loadPhotos(to);
+}
+
+function atLeastOneSelected() {
+    var type = activePanel(),
+        selectedPhotos = document.querySelectorAll('#' + type + '-panel img.selected'),
+        countSelected = selectedPhotos.length;
+
+    return (countSelected > 0);
+}
+
+function enableActions(type) {
+    if (type === 'inventory') {
+        document.getElementById('markSold').disabled = !atLeastOneSelected();
+        document.getElementById('markDeleted').disabled = !atLeastOneSelected();
+    }
+
+    if (type === 'sold') {
+        document.getElementById('markSoldDeleted').disabled = !atLeastOneSelected();
+        document.getElementById('moveCurrent').disabled = !atLeastOneSelected();
+    }
+
+    if (type === 'deleted') {
+        document.getElementById('moveDeletedCurrent').disabled = !atLeastOneSelected();
+        document.getElementById('cleanUpAll').style.display = (atLeastOneSelected()) ? 'none' : 'inline-block';
+        document.getElementById('cleanUpSelected').style.display = (atLeastOneSelected()) ? 'inline-block' : 'none';
+    }
 }
 
 function selectPhoto(e) {
     var targ = getEventTarget(e),
-        editButton = document.getElementById('editPhoto');
+        type = activePanel();
 
     if (targ.nodeName === 'IMG') {
         if (targ.className === 'selected') {
             targ.className = '';
-            editButton.disabled = true;
         } else {
             targ.className = 'selected';
-            editButton.disabled = false;
         }
     }
-
-    editButton.disabled = !oneSelected();
+    enableActions(type);
 }
 
-function loadPhotos() {
-    var invString = localStorage.inventory,
-        invList = document.getElementById('inventory'),
+function loadPhotos(type) {
+    var invList = document.getElementById(type + '-panel'),
         card,
         cardTitle,
         photo,
         img,
-        header;
-    if (invString) {
-        invObj = JSON.parse(invString);
-    } else {
-        invObj = {};
-    }
+        header,
+        invObj = getLocalStorageJSON(type);
 
+    invList.innerHTML = '';
     for (style in invObj) {
         if (invObj.hasOwnProperty(style)) {
-            card = document.createElement('div');
-            card.className = 'mdl-card mdl-shadow--4dp';
-            cardTitle = document.createElement('div');
-            cardTitle.className = 'mdl-card__title';
-            header = document.createElement('h3');
-            header.className = 'mdl-card__title-text';
-            header.textContent = formatStyle(style);
-            cardTitle.appendChild(header);
-            card.appendChild(cardTitle);
-            invObj[style].forEach(function (photo) {
-                img = document.createElement('img');
-                img.src = photo;
-                card.appendChild(img);
-            });
-            invList.appendChild(card);
+            if (invObj[style].length > 0) {
+                card = document.createElement('div');
+                card.className = 'mdl-card mdl-shadow--4dp';
+                card.setAttribute('data-style', style);
+                cardTitle = document.createElement('div');
+                cardTitle.className = 'mdl-card__title';
+                header = document.createElement('h3');
+                header.className = 'mdl-card__title-text';
+                header.textContent = formatStyle(style);
+                cardTitle.appendChild(header);
+                card.appendChild(cardTitle);
+                invObj[style].forEach(function (photo, index) {
+                    img = document.createElement('img');
+                    img.setAttribute('data-index', index);
+                    img.src = photo;
+                    card.appendChild(img);
+                });
+                invList.appendChild(card);
+            }
+        }
+    }
+    invList.onclick = selectPhoto;
+}
+
+function showActions(e) {
+    var clickedTab = getEventTarget(e).hash;
+
+    // Hide all action buttons
+    document.getElementById('markDeleted').style.display = 'none';
+    document.getElementById('markSoldDeleted').style.display = 'none';
+    document.getElementById('markSold').style.display = 'none';
+    document.getElementById('moveCurrent').style.display = 'none';
+    document.getElementById('cleanUpAll').style.display = 'none';
+    document.getElementById('cleanUpSelected').style.display = 'none';
+    document.getElementById('moveDeletedCurrent').style.display = 'none';
+
+    if (clickedTab === '#inventory-panel') {
+        document.getElementById('markDeleted').style.display = 'inline-block';
+        document.getElementById('markSold').style.display = 'inline-block';
+    }
+    if (clickedTab === '#sold-panel') {
+        document.getElementById('markSoldDeleted').style.display = 'inline-block';
+        document.getElementById('moveCurrent').style.display = 'inline-block';
+    }
+    if (clickedTab === '#deleted-panel') {
+        document.getElementById('cleanUpAll').style.display = 'inline-block';
+        document.getElementById('moveDeletedCurrent').style.display = 'inline-block';
+        if (document.querySelectorAll('#deleted-panel img').length === 0) {
+            document.getElementById('cleanUpAll').disabled = true;
+        } else {
+            document.getElementById('cleanUpAll').disabled = false;
         }
     }
 }
 
 function load() {
-    loadPhotos();
-    var invList = document.getElementById('inventory');
-    touchclick(invList, selectPhoto);
+    loadPhotos('inventory');
+    loadPhotos('sold');
+    loadPhotos('deleted');
+    document.getElementById('markSold').onclick = function () {
+        movePhoto('inventory', 'sold');
+    };
+    document.getElementById('markDeleted').onclick = function () {
+        movePhoto('inventory', 'deleted');
+    };
+    document.getElementById('markSoldDeleted').onclick = function () {
+        movePhoto('sold', 'deleted');
+    };
+    document.getElementById('moveCurrent').onclick = function () {
+        movePhoto('sold', 'inventory');
+    };
+    document.getElementById('moveDeletedCurrent').onclick = function () {
+        movePhoto('deleted', 'inventory');
+    };
+    document.getElementById('cleanUpAll').onclick = cleanAll;
+    document.getElementById('cleanUpSelected').onclick = cleanSelected;
+
+    document.querySelector('.mdl-tabs__tab-bar').onclick = showActions;
 }
 
 window.onload = load;

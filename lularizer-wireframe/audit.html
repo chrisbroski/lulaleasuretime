@@ -18,7 +18,10 @@ h3 {
     top: -1px; left: -1px;
 }
 #styles {
+    margin: 8px 8px 4px;
     text-transform: capitalize;
+    font-size: 24px;
+    width: 95%;
 }
 </style>
 
@@ -33,11 +36,11 @@ h3 {
 <div class="mdl-layout__drawer">
 <span class="mdl-layout__title">LuLaRizer</span>
 <nav class="mdl-navigation">
-<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
-<a class="mdl-navigation__link" href="#" onclick="location='collection'; return false; ">Add From Collection</a>
-<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
-<a class="mdl-navigation__link" href="#" onclick="location='audit'; return false; ">Inventory Audit</a>
-<a class="mdl-navigation__link" href="#" onclick="location='upload'; return false; ">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -45,123 +48,83 @@ h3 {
 
 </div>
 
+<footer>
+    <button class="mdl-button" id="markSold">Mark Unselected As Sold</button>
+</footer>
+
+<script src="main.js"></script>
 <script>
-var invObj, selectedStyle;
+var selectedStyle;
 
-var styleData = {
-    'joy': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
-    'tween': {'price': 23},
-    'tall_&_curvy': {'price': 25},
-    'kids_s/m': {'price': 23},
-    'sloan': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
-    'sarah': {'price': 70, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
-    'randy': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'perfect_t': {'price': 36, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'patrick': {'price': 40, 'sizes': ['m', 'l', 'xl', '2xl', '3xl']},
-    'one_size': {'price': 25},
-    'nicole': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'monroe': {'price': 48, 'sizes': ['s', 'l']},
-    'maxi': {'price': 42, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'madison': {'price': 48, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'kids_l/xl': {'price': 23},
-    'lucy': {'price': 52, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'lola': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'lindsay': {'price': 48, 'sizes': ['s', 'm', 'l']},
-    'kids_azure': {'price': 25, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
-    'julia': {'price': 45, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'jordan': {'price': 65, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
-    'jill': {'price': 55, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'jade': {'price': 55, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
-    'irma': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'gracie': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
-    'classic_t': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'cassie': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'ana': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'amelia': {'price': 65, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'carly': {'price': 55, 'sizes': ['xxxs', 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']}
-};
-
-function getEventTarget(e) {
-    var targ;
-    targ = e.target || e.srcElement;
-    if (targ.nodeType === 3) { // defeat Safari bug
-        targ = targ.parentNode;
-    }
-    return targ;
-}
-
-function addEvent(el, evType, fn, bubble) {
-    bubble = bubble || false;
-    if (el.addEventListener) {
-        el.addEventListener(evType, fn, bubble);
-    } else if (el.attachEvent) {
-        el.attachEvent("on" + evType, fn);
-    }
-}
-
-function touchclick(el, func, bubble) {
-    bubble = !!bubble;
-    if ('ontouchstart' in window || 'onmsgesturechange' in window) {
-        el.addEventListener('touchstart', func, bubble);
-    } else {
-        addEvent(el, 'click', func, bubble);
-    }
-}
-
-function formatStyle(styleType) {
-    return styleType.replace(/_/g, ' ');
-}
-
-function oneSelected() {
-    var selectedPhotos = document.querySelectorAll('#inventory img'),
+function markSold() {
+    var selectedPhotos = document.querySelectorAll('#inventory img:not(.selected)'),
+        fromObj = getLocalStorageJSON('inventory'),
+        toObj = getLocalStorageJSON('sold'),
         ii,
-        len,
-        countSelected = 0;
+        style = document.querySelector(".mdl-card").getAttribute('data-style');
 
-    len = selectedPhotos.length;
-    for (ii = 0; ii < len; ii += 1) {
-        if (selectedPhotos[ii].className === 'selected') {
-            countSelected += 1;
+    [].forEach.call(selectedPhotos, function(el) {
+        if (!toObj[style]) {
+            toObj[style] = [];
         }
-    }
+        toObj[style].push(el.src);
+        fromObj[style][el.getAttribute('data-index')] = '';
+    });
 
-    if (countSelected === 1) {
-        return true;
-    }
-    return false;
+    // clean up blank photo data
+    //for (style in fromObj) {
+    //    if (fromObj.hasOwnProperty(style)) {
+            for (ii = fromObj[style].length; ii >= 0; ii -= 1) {
+                if (!fromObj[style][ii]) {
+                    fromObj[style].splice(ii, 1);
+                }
+            }
+    //    }
+    //}
+
+    // save to localstorage
+    localStorage.setItem('inventory', JSON.stringify(fromObj));
+    localStorage.setItem('sold', JSON.stringify(toObj));
+
+    // update view
+    loadPhotos();
 }
 
 function selectPhoto(e) {
-    var targ = getEventTarget(e),
-        editButton = document.getElementById('editPhoto');
+    var targ = getEventTarget(e);
 
     if (targ.nodeName === 'IMG') {
         if (targ.className === 'selected') {
             targ.className = '';
-            editButton.disabled = true;
         } else {
             targ.className = 'selected';
-            editButton.disabled = false;
         }
     }
-
-    editButton.disabled = !oneSelected();
 }
 
 function createStyleDropdown() {
     var selectStyle = document.createElement('select'),
         invContainer = document.createElement('div'),
+        invString = localStorage.inventory,
         option,
-        style;
+        style,
+        invObj;
+
+    if (invString) {
+        invObj = JSON.parse(invString);
+    } else {
+        invObj = {};
+    }
 
     selectStyle.id = 'styles';
-    for (style in styleData) {
-        if (styleData.hasOwnProperty(style)) {
-            option = document.createElement('option');
-            option.value = style;
-            option.textContent = formatStyle(style);
-            selectStyle.appendChild(option);
+    for (style in invObj) {
+        if (invObj.hasOwnProperty(style)) {
+            if (invObj[style].length > 0) {
+                option = document.createElement('option');
+                option.value = style;
+                option.textContent = formatStyle(style);
+                selectStyle.appendChild(option);
+            }
         }
     }
     if (localStorage.auditStyle) {
@@ -186,19 +149,23 @@ function loadPhotos() {
         cardTitle,
         photo,
         img,
-        header;
+        header,
+        invObj;
+
     if (invString) {
         invObj = JSON.parse(invString);
     } else {
         invObj = {};
     }
-    //console.log(selectStyle.value);
+
     invList.innerHTML = '';
     for (style in invObj) {
         if (invObj.hasOwnProperty(style)) {
             if (style === selectStyle.value) {
                 card = document.createElement('div');
                 card.className = 'mdl-card mdl-shadow--4dp';
+                card.setAttribute('data-style', style);
+                touchclick(card, selectPhoto);
                 cardTitle = document.createElement('div');
                 cardTitle.className = 'mdl-card__title';
                 header = document.createElement('h3');
@@ -206,8 +173,9 @@ function loadPhotos() {
                 header.textContent = formatStyle(style);
                 cardTitle.appendChild(header);
                 card.appendChild(cardTitle);
-                invObj[style].forEach(function (photo) {
+                invObj[style].forEach(function (photo, index) {
                     img = document.createElement('img');
+                    img.setAttribute('data-index', index);
                     img.src = photo;
                     card.appendChild(img);
                 });
@@ -220,8 +188,7 @@ function loadPhotos() {
 function load() {
     createStyleDropdown();
     loadPhotos();
-    //var invList = document.getElementById('inventory');
-    //touchclick(invList, selectPhoto);
+    document.getElementById('markSold').onclick = markSold;
 }
 
 window.onload = load;

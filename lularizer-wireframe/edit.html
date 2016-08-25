@@ -1,7 +1,7 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Label Photo</title>
+<title>Emboss Photo</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
@@ -45,18 +45,18 @@ footer p {margin: 1em 0; }
 
 <header class="mdl-layout__header">
 <div class="mdl-layout__header-row">
-<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Label Photo</a></span>
+<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Emboss Photo</a></span>
 </div>
 </header>
 
 <div class="mdl-layout__drawer">
 <span class="mdl-layout__title">LuLaRizer</span>
 <nav class="mdl-navigation">
-<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
-<a class="mdl-navigation__link" href="#" onclick="location='collection'; return false; ">Add From Collection</a>
-<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
-<a class="mdl-navigation__link" href="#" onclick="location='audit'; return false; ">Inventory Audit</a>
-<a class="mdl-navigation__link" href="#" onclick="location='upload'; return false; ">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -89,6 +89,7 @@ footer p {margin: 1em 0; }
 
 </div>
 
+<script src="main.js"></script>
 <script>
 var colors = {
     'colorYellow': '#fed141',
@@ -101,55 +102,10 @@ var colors = {
     'colorGray': '#888b8d'
 }, color = '#fed141';
 
-var styleData = {
-    'joy': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
-    'tween': {'price': 23},
-    'tall_&_curvy': {'price': 25},
-    'kids_s/m': {'price': 23},
-    'sloan': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
-    'sarah': {'price': 70, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
-    'randy': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'perfect_t': {'price': 36, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'patrick': {'price': 40, 'sizes': ['m', 'l', 'xl', '2xl', '3xl']},
-    'one_size': {'price': 25},
-    'nicole': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'monroe': {'price': 48, 'sizes': ['s', 'l']},
-    'maxi': {'price': 42, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'madison': {'price': 48, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'kids_l/xl': {'price': 23},
-    'lucy': {'price': 52, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'lola': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'lindsay': {'price': 48, 'sizes': ['s', 'm', 'l']},
-    'kids_azure': {'price': 25, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
-    'julia': {'price': 45, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'jordan': {'price': 65, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
-    'jill': {'price': 55, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'jade': {'price': 55, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
-    'irma': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'gracie': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
-    'classic_t': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'cassie': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'ana': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
-    'amelia': {'price': 65, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'carly': {'price': 55, 'sizes': ['xxxs', 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']}
-};
-
-function Q$(name) {
-    var reQs, val;
-    reQs = new RegExp("[\\?&]" + name + "=([^&#]*)", "i");
-    val = reQs.exec(parent.location.search);
-    return (val) ? unescape(val[1]) : "";
-}
-
 function capitalizeEachWord(str) {
     return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
     });
-}
-
-function formatStyle(styleType) {
-    return styleType.replace(/_/g, ' ');
 }
 
 function buildSizeUI() {
@@ -300,33 +256,6 @@ function save() {
     invObj[style].push(bitmapData);
     localStorage.setItem('inventory', JSON.stringify(invObj));
     history.back();
-}
-
-function getEventTarget(e) {
-    var targ;
-    targ = e.target || e.srcElement;
-    if (targ.nodeType === 3) { // defeat Safari bug
-        targ = targ.parentNode;
-    }
-    return targ;
-}
-
-function addEvent(el, evType, fn, bubble) {
-    bubble = bubble || false;
-    if (el.addEventListener) {
-        el.addEventListener(evType, fn, bubble);
-    } else if (el.attachEvent) {
-        el.attachEvent("on" + evType, fn);
-    }
-}
-
-function touchclick(el, func, bubble) {
-    bubble = !!bubble;
-    if ('ontouchstart' in window || 'onmsgesturechange' in window) {
-        el.addEventListener('touchstart', func, bubble);
-    } else {
-        addEvent(el, 'click', func, bubble);
-    }
 }
 
 function isColorButton(el) {
