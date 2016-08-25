@@ -40,3 +40,10 @@
     float: right;
     z-index: 1;
 }
+
+.mdl-card__actions {
+    text-align: right;
+}
+.mdl-card__actions button {
+    margin-left: 8px;
+}

@@ -81,38 +81,13 @@ footer p {margin: 1em 0; }
     <p><input id="watermark" value="www.LuLaLeasureTime.com">
 </div>
 <div class="mdl-card__actions">
-    <button onclick="history.back()">Cancel</button>
-    <button onclick="save()">Save</button>
+    <button onclick="history.back()" class="mdl-button mdl-js-button mdl-shadow--2dp">Cancel</button>
+    <button onclick="save()" class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored">Save</button>
 </div>
 </div>
 </main>
 
 </div>
-<!--
-<div id="colors">
-    <label>Color</label>
-    <div id="colorYellow" class="selectedColor"></div>
-    <div id="colorOrange"></div>
-    <div id="colorPink"></div>
-    <div id="colorFuchsia"></div>
-    <div id="colorPurple"></div>
-    <div id="colorBlue"></div>
-    <div id="colorGreen"></div>
-</div>
-
-<p><label>Style</label> <select id="selectStyle"></select>
-    <label>Size</label> <select id="selectSize"></select>
-<p><label>Watermark</label><br> <input id="watermark" value="www.LuLaLeasureTime.com">
-
-<p><canvas width="450" height="400" id="preview"></canvas>
-
-<footer>
-<p>
-<button>Cancel</button>
-<button onclick="save()">Add to Inventory</button>
-</footer>
-
-</article>-->
 
 <script>
 var colors = {
@@ -157,7 +132,7 @@ var styleData = {
     'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
     'ana': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
     'amelia': {'price': 65, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
-    'carly': {'price': 55, 'sizes': ['xs', 's', 'm']}
+    'carly': {'price': 55, 'sizes': ['xxxs', 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']}
 };
 
 function capitalizeEachWord(str) {
@@ -176,14 +151,15 @@ function buildSizeUI() {
         option;
 
     selSizes.innerHTML = '';
-
-    if (styleData[selectedStyle].sizes) {
+    if (selectedStyle && styleData[selectedStyle].sizes) {
         styleData[selectedStyle].sizes.forEach(function (size) {
             option = document.createElement('option');
             option.value = size;
-            option.textContent = formatStyle(size);
+            option.textContent = size.toUpperCase();
             selSizes.appendChild(option);
         });
+        selSizes.selectedIndex = Math.floor(selSizes.options.length / 2);
+        selSizes.disabled = false;
     } else {
         selSizes.disabled = true;
     }
@@ -245,56 +221,55 @@ function logo(ctx) {
     ctx.stroke();
 }
 
-function lularize(newStyle) {
-    if (newStyle) {
-        localStorage.style = document.getElementById('selectStyle').selectedIndex;
-        buildSizeUI();
+function emboss(img, style, lulalroeColor, size, watermark) {
+    var canvas = document.getElementById('preview'),
+        ctx = canvas.getContext('2d');
+
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = lulalroeColor;
+    ctx.fillStyle = lulalroeColor;
+    ctx.textAlign = 'center';
+    ctx.font = '20px maven';
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0, 300, 400);
+
+    // add watermark
+    ctx.fillStyle = 'black';
+    ctx.fillText(watermark, 152, 392);
+    ctx.strokeStyle = lulalroeColor;
+    ctx.fillStyle = lulalroeColor;
+    ctx.fillText(watermark, 150, 390);
+
+    ctx.fillRect(300, 0, 150, 65);
+    ctx.font = '44px steelfish';
+
+    if (size) {
+        ctx.fillText(size.toUpperCase(), 375, 130);
+        ctx.fillText('$' + styleData[style].price, 375, 200);
+    } else {
+        ctx.fillText('$' + styleData[style].price, 375, 130);
     }
 
-    var canvas = document.getElementById('preview'),
-        ctx = canvas.getContext('2d'),
+    ctx.strokeStyle = 'white';
+    ctx.fillStyle = 'white';
+    ctx.font = '40px steelfish';
+    ctx.fillText(formatStyle(style).toUpperCase(), 375, 49);
+
+    logo(ctx);
+}
+
+function lularize() {
+    var color = localStorage.color,
+        lulalroeColor = colors[color],
+        style = document.getElementById('selectStyle').options[localStorage.style].value,
+        size = document.getElementById('selectSize').value,
         img = new Image();
 
-    img.addEventListener("load", function() {
-        //var //color = document.getElementById('selectColor').value,
-        var style = document.getElementById('selectStyle').value,
-            size = document.getElementById('selectSize').value,
-            lulalroeColor = colors[color];
-
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = lulalroeColor;
-        ctx.fillStyle = lulalroeColor;
-        ctx.textAlign = 'center';
-        ctx.font = '20px maven';
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0, 300, 400);
-
-        // add watermark
-        ctx.fillStyle = 'black';
-        ctx.fillText(document.getElementById('watermark').value, 152, 392);
-        ctx.strokeStyle = lulalroeColor;
-        ctx.fillStyle = lulalroeColor;
-        ctx.fillText(document.getElementById('watermark').value, 150, 390);
-
-        ctx.fillRect(300, 0, 150, 65);
-        ctx.font = '44px steelfish';
-
-        if (size) {
-            ctx.fillText(size.toUpperCase(), 375, 130);
-            ctx.fillText('$' + styleData[style].price, 375, 200);
-        } else {
-            ctx.fillText('$' + styleData[style].price, 375, 130);
-        }
-
-        ctx.strokeStyle = 'white';
-        ctx.fillStyle = 'white';
-        ctx.font = '40px steelfish';
-        ctx.fillText(formatStyle(style).toUpperCase(), 375, 49);
-
-        logo(ctx);
+    img.addEventListener("load", function () {
+        emboss(this, style, lulalroeColor, size, document.getElementById('watermark').value);
     }, false);
-    img.src = 'test.jpg'; // Set source path
+    img.src = 'test.jpg'; // Set source path somehow
 }
 
 function save() {
@@ -354,6 +329,13 @@ function isColorButton(el) {
     return false;
 }
 
+function changeStyle() {
+    var iStyle = document.getElementById('selectStyle').selectedIndex;
+    localStorage.style = iStyle;
+    buildSizeUI();
+    lularize();
+}
+
 function changeColor(e) {
     var targ = getEventTarget(e);
     if (isColorButton(targ)) {
@@ -366,37 +348,36 @@ function changeColor(e) {
         document.getElementById('colorGreen').className = '';
 
         targ.className = 'selectedColor'
-        color = targ.id;
         localStorage.color = targ.id;
         lularize();
     }
 }
 
 function init() {
-    //console.log(localStorage.color, colors[localStorage.color]);
     if (localStorage.color && colors[localStorage.color]) {
         color = localStorage.color;
-        //targ.className = 'selectedColor'
     } else {
         color = 'colorYellow';
     }
-    //console.log(color);
+
     document.getElementById(color).className = 'selectedColor'
 
-    if (!localStorage.style && styleData[localStorage.style]) {
+    if (localStorage.style && styleData[localStorage.style]) {
+        style = localStorage.style;
+    } else {
         localStorage.style = 0;
     }
 }
 
 function load() {
     buildStyleUI();
-    document.getElementById('selectStyle').onchange = function () {lularize(true); };
+    document.getElementById('selectStyle').onchange = changeStyle;
     document.getElementById('selectSize').onchange = lularize;
     touchclick(document.getElementById('colors'), changeColor);
     document.getElementById('watermark').onchange = lularize;
 
     init();
-    window.setTimeout(function () {lularize(true); }, 50);
+    window.setTimeout(lularize, 50);
 }
 
 window.onload = load;
