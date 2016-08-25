@@ -23,8 +23,19 @@ html, footer {
 <div id="photoGuide"></div>
 </article>
 
-<footer><p><button onclick="history.back()">Cancel</button><button onclick="location='edit'">Take photo</button></footer>
+<footer><p><button onclick="history.back()">Cancel</button><button onclick="goToEdit()">Take photo</button></footer>
 
 <script>
+var stockPhotos = ['IMG_0092.jpg', 'IMG_0094.jpg', 'IMG_0096.jpg', 'IMG_0104.jpg', 'IMG_0106.jpg', 'IMG_0204.jpg', 'IMG_0205.jpg', 'IMG_0206.jpg'];
 
+function goToEdit() {
+    var img = document.getElementById('fakeCamera');
+    location = 'edit?file=' + img.src.slice(img.src.lastIndexOf('/') + 1);
+}
+
+function randomPhoto() {
+    document.getElementById('fakeCamera').src = 'album/' + stockPhotos[Math.floor(Math.random() * stockPhotos.length)];
+}
+
+window.onload = randomPhoto
 </script>

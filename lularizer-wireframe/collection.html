@@ -20,18 +20,6 @@ h3 {
 }
 </style>
 
-<!--<article>
-<h1><a href="/lularizer-wireframe/">LuLaRizer</a></h1>
-<div id="inventory"></div>
-
-<footer>
-<p>
-<button id="editPhoto" disabled="disabled">edit</button>
-<button>delete</button>
-</footer>
-
-</article>-->
-
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
 <header class="mdl-layout__header">
@@ -56,7 +44,6 @@ h3 {
 </div>
 
 <script>
-var invObj;
 
 function getEventTarget(e) {
     var targ;
@@ -85,79 +72,30 @@ function touchclick(el, func, bubble) {
     }
 }
 
-function formatStyle(styleType) {
-    return styleType.replace(/_/g, ' ');
-}
-
-function oneSelected() {
-    var selectedPhotos = document.querySelectorAll('#inventory img'),
-        ii,
-        len,
-        countSelected = 0;
-
-    len = selectedPhotos.length;
-    for (ii = 0; ii < len; ii += 1) {
-        if (selectedPhotos[ii].className === 'selected') {
-            countSelected += 1;
-        }
-    }
-
-    if (countSelected === 1) {
-        return true;
-    }
-    return false;
-}
-
 function selectPhoto(e) {
-    var targ = getEventTarget(e),
-        editButton = document.getElementById('editPhoto');
+    var targ = getEventTarget(e);
+    location = 'edit?file=' + targ.src.slice(targ.src.lastIndexOf('/') + 1);
+}
 
-    if (targ.nodeName === 'IMG') {
-        if (targ.className === 'selected') {
-            targ.className = '';
-            editButton.disabled = true;
-        } else {
-            targ.className = 'selected';
-            editButton.disabled = false;
-        }
-    }
+function addPhoto(path) {
+    var invList = document.getElementById('inventory'),
+        photo,
+        img;
 
-    editButton.disabled = !oneSelected();
+    img = document.createElement('img');
+    img.src = path;
+    invList.appendChild(img);
 }
 
 function loadPhotos() {
-    var invString = localStorage.inventory,
-        invList = document.getElementById('inventory'),
-        card,
-        cardTitle,
-        photo,
-        img,
-        header;
-    if (invString) {
-        invObj = JSON.parse(invString);
-    } else {
-        invObj = {};
-    }
-
-    for (style in invObj) {
-        if (invObj.hasOwnProperty(style)) {
-            card = document.createElement('div');
-            card.className = 'mdl-card mdl-shadow--4dp';
-            cardTitle = document.createElement('div');
-            cardTitle.className = 'mdl-card__title';
-            header = document.createElement('h3');
-            header.className = 'mdl-card__title-text';
-            header.textContent = formatStyle(style);
-            cardTitle.appendChild(header);
-            card.appendChild(cardTitle);
-            invObj[style].forEach(function (photo) {
-                img = document.createElement('img');
-                img.src = photo;
-                card.appendChild(img);
-            });
-            invList.appendChild(card);
-        }
-    }
+    addPhoto('album/IMG_0092.jpg');
+    addPhoto('album/IMG_0094.jpg');
+    addPhoto('album/IMG_0096.jpg');
+    addPhoto('album/IMG_0104.jpg');
+    addPhoto('album/IMG_0106.jpg');
+    addPhoto('album/IMG_0204.jpg');
+    addPhoto('album/IMG_0205.jpg');
+    addPhoto('album/IMG_0206.jpg');
 }
 
 function load() {

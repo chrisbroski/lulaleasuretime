@@ -53,7 +53,7 @@ footer p {margin: 1em 0; }
 <span class="mdl-layout__title">LuLaRizer</span>
 <nav class="mdl-navigation">
 <a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
-<a class="mdl-navigation__link" href="#" onclick="return false; ">Add From Collection</a>
+<a class="mdl-navigation__link" href="#" onclick="location='collection'; return false; ">Add From Collection</a>
 <a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
 <a class="mdl-navigation__link" href="#" onclick="return false; ">Inventory Audit</a>
 <a class="mdl-navigation__link" href="#" onclick="return false; ">Upload to Facebook</a>
@@ -135,6 +135,13 @@ var styleData = {
     'carly': {'price': 55, 'sizes': ['xxxs', 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']}
 };
 
+function Q$(name) {
+    var reQs, val;
+    reQs = new RegExp("[\\?&]" + name + "=([^&#]*)", "i");
+    val = reQs.exec(parent.location.search);
+    return (val) ? unescape(val[1]) : "";
+}
+
 function capitalizeEachWord(str) {
     return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -167,6 +174,7 @@ function buildSizeUI() {
 
 function buildStyleUI() {
     var selStyle = document.getElementById('selectStyle'),
+        iStyle = localStorage.style || 0,
         option;
 
     for (style in styleData) {
@@ -177,7 +185,7 @@ function buildStyleUI() {
             selStyle.appendChild(option);
         }
     }
-    selStyle.selectedIndex = localStorage.style;
+    selStyle.selectedIndex = iStyle;
 
     buildSizeUI();
 }
@@ -236,7 +244,7 @@ function emboss(img, style, lulalroeColor, size, watermark) {
 
     // add watermark
     ctx.fillStyle = 'black';
-    ctx.fillText(watermark, 152, 392);
+    ctx.fillText(watermark, 151, 391);
     ctx.strokeStyle = lulalroeColor;
     ctx.fillStyle = lulalroeColor;
     ctx.fillText(watermark, 150, 390);
@@ -269,7 +277,7 @@ function lularize() {
     img.addEventListener("load", function () {
         emboss(this, style, lulalroeColor, size, document.getElementById('watermark').value);
     }, false);
-    img.src = 'test.jpg'; // Set source path somehow
+    img.src = 'album/' + Q$('file'); // Set source path somehow
 }
 
 function save() {
