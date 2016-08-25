@@ -1,0 +1,228 @@
+<!doctype html>
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Audit Inventory</title>
+<link rel="stylesheet" href="mdl/material.lime-pink.min.css">
+<script src="mdl/material.min.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
+<style>
+#inventory img {width: 90px; margin: 4px; }
+h3 {
+    font-family: steelfish;
+    text-transform: capitalize;
+}
+.selected {
+    box-shadow: 2px 2px 8px black;
+    position: relative;
+    top: -1px; left: -1px;
+}
+#styles {
+    text-transform: capitalize;
+}
+</style>
+
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
+
+<header class="mdl-layout__header">
+<div class="mdl-layout__header-row">
+<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Audit Inventory</a></span>
+</div>
+</header>
+
+<div class="mdl-layout__drawer">
+<span class="mdl-layout__title">LuLaRizer</span>
+<nav class="mdl-navigation">
+<a class="mdl-navigation__link" href="new" onclick="location='new'; return false; ">Add From Camera</a>
+<a class="mdl-navigation__link" href="#" onclick="location='collection'; return false; ">Add From Collection</a>
+<a class="mdl-navigation__link" href="inventory" onclick="location='inventory'; return false; ">Browse Inventory</a>
+<a class="mdl-navigation__link" href="#" onclick="location='audit'; return false; ">Inventory Audit</a>
+<a class="mdl-navigation__link" href="#" onclick="location='upload'; return false; ">Upload to Facebook</a>
+</nav>
+</div>
+
+<main class="mdl-layout__content" id="main"></main>
+
+</div>
+
+<script>
+var invObj, selectedStyle;
+
+var styleData = {
+    'joy': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
+    'tween': {'price': 23},
+    'tall_&_curvy': {'price': 25},
+    'kids_s/m': {'price': 23},
+    'sloan': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
+    'sarah': {'price': 70, 'sizes': ['xs', 's', 'm', 'l', 'xl']},
+    'randy': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'perfect_t': {'price': 36, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'patrick': {'price': 40, 'sizes': ['m', 'l', 'xl', '2xl', '3xl']},
+    'one_size': {'price': 25},
+    'nicole': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'monroe': {'price': 48, 'sizes': ['s', 'l']},
+    'maxi': {'price': 42, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'madison': {'price': 48, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'kids_l/xl': {'price': 23},
+    'lucy': {'price': 52, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'lola': {'price': 48, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'lindsay': {'price': 48, 'sizes': ['s', 'm', 'l']},
+    'kids_azure': {'price': 25, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
+    'julia': {'price': 45, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'jordan': {'price': 65, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
+    'jill': {'price': 55, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'jade': {'price': 55, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl']},
+    'irma': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'gracie': {'price': 28, 'sizes': ['2', '4', '6', '8', '10', '12', '14']},
+    'classic_t': {'price': 35, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'cassie': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'azure': {'price': 35, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'ana': {'price': 60, 'sizes': ['xs', 's', 'm', 'l', 'xl', '2xl', '3xl']},
+    'amelia': {'price': 65, 'sizes': ['xxs', 'xs', 's', 'm', 'l', 'xl', '2xl']},
+    'carly': {'price': 55, 'sizes': ['xxxs', 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', 'xxxl']}
+};
+
+function getEventTarget(e) {
+    var targ;
+    targ = e.target || e.srcElement;
+    if (targ.nodeType === 3) { // defeat Safari bug
+        targ = targ.parentNode;
+    }
+    return targ;
+}
+
+function addEvent(el, evType, fn, bubble) {
+    bubble = bubble || false;
+    if (el.addEventListener) {
+        el.addEventListener(evType, fn, bubble);
+    } else if (el.attachEvent) {
+        el.attachEvent("on" + evType, fn);
+    }
+}
+
+function touchclick(el, func, bubble) {
+    bubble = !!bubble;
+    if ('ontouchstart' in window || 'onmsgesturechange' in window) {
+        el.addEventListener('touchstart', func, bubble);
+    } else {
+        addEvent(el, 'click', func, bubble);
+    }
+}
+
+function formatStyle(styleType) {
+    return styleType.replace(/_/g, ' ');
+}
+
+function oneSelected() {
+    var selectedPhotos = document.querySelectorAll('#inventory img'),
+        ii,
+        len,
+        countSelected = 0;
+
+    len = selectedPhotos.length;
+    for (ii = 0; ii < len; ii += 1) {
+        if (selectedPhotos[ii].className === 'selected') {
+            countSelected += 1;
+        }
+    }
+
+    if (countSelected === 1) {
+        return true;
+    }
+    return false;
+}
+
+function selectPhoto(e) {
+    var targ = getEventTarget(e),
+        editButton = document.getElementById('editPhoto');
+
+    if (targ.nodeName === 'IMG') {
+        if (targ.className === 'selected') {
+            targ.className = '';
+            editButton.disabled = true;
+        } else {
+            targ.className = 'selected';
+            editButton.disabled = false;
+        }
+    }
+
+    editButton.disabled = !oneSelected();
+}
+
+function createStyleDropdown() {
+    var selectStyle = document.createElement('select'),
+        invContainer = document.createElement('div'),
+        option,
+        style;
+
+    selectStyle.id = 'styles';
+    for (style in styleData) {
+        if (styleData.hasOwnProperty(style)) {
+            option = document.createElement('option');
+            option.value = style;
+            option.textContent = formatStyle(style);
+            selectStyle.appendChild(option);
+        }
+    }
+    if (localStorage.auditStyle) {
+        selectedStyle = localStorage.auditStyle;
+    } else {
+        selectedStyle = 0;
+        localStorage.auditStyle = '0';
+    }
+    selectStyle.selectedIndex = selectedStyle;
+    selectStyle.onchange = loadPhotos;
+    document.getElementById('main').appendChild(selectStyle);
+
+    invContainer.id = 'inventory';
+    document.getElementById('main').appendChild(invContainer);
+}
+
+function loadPhotos() {
+    var invString = localStorage.inventory,
+        invList = document.getElementById('inventory'),
+        selectStyle = document.getElementById('styles'),
+        card,
+        cardTitle,
+        photo,
+        img,
+        header;
+    if (invString) {
+        invObj = JSON.parse(invString);
+    } else {
+        invObj = {};
+    }
+    //console.log(selectStyle.value);
+    invList.innerHTML = '';
+    for (style in invObj) {
+        if (invObj.hasOwnProperty(style)) {
+            if (style === selectStyle.value) {
+                card = document.createElement('div');
+                card.className = 'mdl-card mdl-shadow--4dp';
+                cardTitle = document.createElement('div');
+                cardTitle.className = 'mdl-card__title';
+                header = document.createElement('h3');
+                header.className = 'mdl-card__title-text';
+                header.textContent = formatStyle(style);
+                cardTitle.appendChild(header);
+                card.appendChild(cardTitle);
+                invObj[style].forEach(function (photo) {
+                    img = document.createElement('img');
+                    img.src = photo;
+                    card.appendChild(img);
+                });
+                invList.appendChild(card);
+            }
+        }
+    }
+}
+
+function load() {
+    createStyleDropdown();
+    loadPhotos();
+    //var invList = document.getElementById('inventory');
+    //touchclick(invList, selectPhoto);
+}
+
+window.onload = load;
+</script>
