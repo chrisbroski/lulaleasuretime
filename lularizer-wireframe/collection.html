@@ -1,21 +1,29 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>Lularizer</title>
+<title>Add To Inventory</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
 <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 <link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
 <style>
-
+#inventory img {width: 90px; margin: 4px; }
+h3 {
+    font-family: steelfish;
+    text-transform: capitalize;
+}
+.selected {
+    box-shadow: 2px 2px 8px black;
+    position: relative;
+    top: -1px; left: -1px;
+}
 </style>
-<body>
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
 <header class="mdl-layout__header">
 <div class="mdl-layout__header-row">
-<span class="mdl-layout__title">LuLaRizer</span>
+<span class="mdl-layout__title">Add From Photo Library</span>
 </div>
 </header>
 
@@ -30,16 +38,43 @@
 </nav>
 </div>
 
-<main class="mdl-layout__content">
-<div class="mdl-card mdl-shadow--4dp">
-<div class="mdl-card__media"><img src="stacy_emily_flowers.jpg"></div>
-<div class="mdl-card__supporting-text">
-The LuLaRizer helps LuLaRoe fashion consultants share and manage inventory with clear, high-quality photos.
-</div>
-</div>
-<a class="mdl-button mdl-button--fab mdl-button--colored mdl-shadow--8dp" href="new" onclick="location='new'; return false; "><i class="material-icons">camera_enhance</i></a>
-</main>
+<main class="mdl-layout__content" id="inventory"></main>
 
 </div>
 
 <script src="main.js"></script>
+<script>
+function selectPhoto(e) {
+    var targ = getEventTarget(e);
+    location = 'edit?file=' + targ.src.slice(targ.src.lastIndexOf('/') + 1);
+}
+
+function addPhoto(path) {
+    var invList = document.getElementById('inventory'),
+        photo,
+        img;
+
+    img = document.createElement('img');
+    img.src = path;
+    invList.appendChild(img);
+}
+
+function loadPhotos() {
+    addPhoto('album/IMG_0092.jpg');
+    addPhoto('album/IMG_0094.jpg');
+    addPhoto('album/IMG_0096.jpg');
+    addPhoto('album/IMG_0104.jpg');
+    addPhoto('album/IMG_0106.jpg');
+    addPhoto('album/IMG_0204.jpg');
+    addPhoto('album/IMG_0205.jpg');
+    addPhoto('album/IMG_0206.jpg');
+}
+
+function load() {
+    loadPhotos();
+    var invList = document.getElementById('inventory');
+    touchclick(invList, selectPhoto);
+}
+
+window.onload = load;
+</script>

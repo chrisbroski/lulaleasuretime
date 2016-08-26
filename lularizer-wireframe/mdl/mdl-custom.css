@@ -36,7 +36,25 @@
     border-top-right-radius: 2px;
 }
 .mdl-button--fab {
-    margin: -32px 32px 0 0;
-    float: right;
+    /*margin: -32px 32px 0 0;
+    float: right;*/
+    position: fixed;
+    bottom: 32px; right: 32px; 
+    z-index: 1;
+}
+
+.mdl-card__actions {
+    text-align: right;
+}
+.mdl-card__actions button {
+    margin-left: 8px;
+}
+
+footer {
+    position: fixed;
+    left: 0; bottom: 0;
+    height: 64px; width: 100%;
+    background: #fff;
+    text-align: center;
     z-index: 1;
 }
