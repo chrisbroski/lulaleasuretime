@@ -45,7 +45,7 @@ footer p {margin: 1em 0; }
 
 <header class="mdl-layout__header">
 <div class="mdl-layout__header-row">
-<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Emboss Photo</a></span>
+<span class="mdl-layout__title">Emboss Photo</span>
 </div>
 </header>
 
@@ -111,17 +111,22 @@ function capitalizeEachWord(str) {
 function buildSizeUI() {
     var selSizes = document.getElementById('selectSize'),
         selectedStyle = document.getElementById('selectStyle').value,
-        option;
+        option,
+        size = localStorage.size;
 
     selSizes.innerHTML = '';
     if (selectedStyle && styleData[selectedStyle].sizes) {
-        styleData[selectedStyle].sizes.forEach(function (size) {
+        styleData[selectedStyle].sizes.forEach(function (availableSize) {
             option = document.createElement('option');
-            option.value = size;
-            option.textContent = size.toUpperCase();
+            option.value = availableSize;
+            option.textContent = availableSize.toUpperCase();
             selSizes.appendChild(option);
         });
-        selSizes.selectedIndex = Math.floor(selSizes.options.length / 2);
+        if (size && styleData[selectedStyle].sizes.indexOf(size) > -1) {
+            selSizes.value = size;
+        } else {
+            selSizes.selectedIndex = Math.floor(selSizes.options.length / 2);
+        }
         selSizes.disabled = false;
     } else {
         selSizes.disabled = true;
@@ -273,6 +278,12 @@ function changeStyle() {
     lularize();
 }
 
+function changeSize() {
+    var size = document.getElementById('selectSize').value;
+    localStorage.size = size;
+    lularize();
+}
+
 function changeColor(e) {
     var targ = getEventTarget(e);
     if (isColorButton(targ)) {
@@ -309,7 +320,7 @@ function init() {
 function load() {
     buildStyleUI();
     document.getElementById('selectStyle').onchange = changeStyle;
-    document.getElementById('selectSize').onchange = lularize;
+    document.getElementById('selectSize').onchange = changeSize;
     touchclick(document.getElementById('colors'), changeColor);
     document.getElementById('watermark').onchange = lularize;
 

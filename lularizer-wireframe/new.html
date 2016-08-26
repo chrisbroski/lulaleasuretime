@@ -7,7 +7,12 @@
 html, footer {
     background: black;
 }
-#fakeCamera {width: 100%; }
+#fakeCamera {
+    margin-left: -10%;
+    margin-top: -10%;
+    width: 120%;
+    max-width: 120%;
+}
 #photoGuide {
     position: absolute;
     margin-left: -50px;
@@ -16,10 +21,15 @@ html, footer {
     border: 2px dashed yellow;
     width: 100px; height: 100px;
 }
+#photoView {
+    overflow: hidden;
+}
 </style>
 
 <article>
+<div id="photoView">
 <img src="album/IMG_0094.jpg" id="fakeCamera" alt="photo">
+</div>
 <div id="photoGuide"></div>
 </article>
 
@@ -36,8 +46,18 @@ function goToEdit() {
     location = 'edit?file=' + img.src.slice(img.src.lastIndexOf('/') + 1);
 }
 
+function wiggle() {
+    var x = (Math.random() - 10).toFixed(2) + '%',
+        y = (Math.random() - 10).toFixed(2) + '%';
+
+    document.getElementById('fakeCamera').style.marginLeft = x;
+    document.getElementById('fakeCamera').style.marginTop = y;
+    window.setTimeout(wiggle, 200);
+}
+
 function randomPhoto() {
     document.getElementById('fakeCamera').src = 'album/' + stockPhotos[Math.floor(Math.random() * stockPhotos.length)];
+    window.setTimeout(wiggle, 200);
 }
 
 window.onload = randomPhoto

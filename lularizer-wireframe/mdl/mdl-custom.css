@@ -36,8 +36,10 @@
     border-top-right-radius: 2px;
 }
 .mdl-button--fab {
-    margin: -32px 32px 0 0;
-    float: right;
+    /*margin: -32px 32px 0 0;
+    float: right;*/
+    position: fixed;
+    bottom: 32px; right: 32px; 
     z-index: 1;
 }
 

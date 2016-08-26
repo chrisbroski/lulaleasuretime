@@ -25,7 +25,7 @@ h3 {
 
 <header class="mdl-layout__header">
 <div class="mdl-layout__header-row">
-<span class="mdl-layout__title"><a href="/lularizer-wireframe/">Upload</a></span>
+<span class="mdl-layout__title">Upload</span>
 </div>
 </header>
 
@@ -44,9 +44,21 @@ h3 {
 
 </div>
 
+<footer>
+    <button class="mdl-button" id="upload" disabled="disabled">Upload Selected</button>
+</footer>
+
 <script src="main.js"></script>
 <script>
-var invObj;
+function upload() {
+    var selectedPhotos = document.querySelectorAll('#inventory img.selected');
+
+    [].forEach.call(selectedPhotos, function(el) {
+        // upload a photo, I guess
+    });
+
+    alert('Uploading is not supported at this time, but you can imagine it, right?');
+}
 
 function oneSelected() {
     var selectedPhotos = document.querySelectorAll('#inventory img'),
@@ -61,7 +73,7 @@ function oneSelected() {
         }
     }
 
-    if (countSelected === 1) {
+    if (countSelected > 0) {
         return true;
     }
     return false;
@@ -69,7 +81,7 @@ function oneSelected() {
 
 function selectPhoto(e) {
     var targ = getEventTarget(e),
-        editButton = document.getElementById('editPhoto');
+        editButton = document.getElementById('upload');
 
     if (targ.nodeName === 'IMG') {
         if (targ.className === 'selected') {
@@ -91,7 +103,9 @@ function loadPhotos() {
         cardTitle,
         photo,
         img,
-        header;
+        header,
+        invObj;
+
     if (invString) {
         invObj = JSON.parse(invString);
     } else {
@@ -100,29 +114,31 @@ function loadPhotos() {
 
     for (style in invObj) {
         if (invObj.hasOwnProperty(style)) {
-            card = document.createElement('div');
-            card.className = 'mdl-card mdl-shadow--4dp';
-            cardTitle = document.createElement('div');
-            cardTitle.className = 'mdl-card__title';
-            header = document.createElement('h3');
-            header.className = 'mdl-card__title-text';
-            header.textContent = formatStyle(style);
-            cardTitle.appendChild(header);
-            card.appendChild(cardTitle);
-            invObj[style].forEach(function (photo) {
-                img = document.createElement('img');
-                img.src = photo;
-                card.appendChild(img);
-            });
-            invList.appendChild(card);
+            if (invObj[style].length > 0) {
+                card = document.createElement('div');
+                card.className = 'mdl-card mdl-shadow--4dp';
+                cardTitle = document.createElement('div');
+                cardTitle.className = 'mdl-card__title';
+                header = document.createElement('h3');
+                header.className = 'mdl-card__title-text';
+                header.textContent = formatStyle(style);
+                cardTitle.appendChild(header);
+                card.appendChild(cardTitle);
+                invObj[style].forEach(function (photo) {
+                    img = document.createElement('img');
+                    img.src = photo;
+                    card.appendChild(img);
+                });
+                invList.appendChild(card);
+            }
         }
     }
 }
 
 function load() {
     loadPhotos();
-    var invList = document.getElementById('inventory');
-    touchclick(invList, selectPhoto);
+    touchclick(document.getElementById('inventory'), selectPhoto);
+    document.getElementById('upload').onclick = upload;
 }
 
 window.onload = load;
