@@ -5,42 +5,19 @@
 <title>Emboss Photo</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
+<link rel="stylesheet" type="text/css" href="mdl/main.css">
 <style>
 canvas {
-    /*border: 1px solid #333;*/
     background: #fff;
     max-width: 100%;
 }
-article {padding-bottom: 64px; }
 #watermark {width: 100%; font-family: maven; }
 p {margin: 0.5em 0; }
-footer p {margin: 1em 0; }
-
-#colors > div {
-    margin: 0 5px;
-    width: 20px; height: 20px;
-    display: inline-block;
-}
-#colors {padding-top: 2px;}
-.selectedColor {
-    box-shadow: 1px 1px 3px black;
-    position: relative;
-    top: -1px; left: -1px;
-}
 
 #selectStyle {text-transform: capitalize; }
-
-#colorYellow {background-color: #fed141; }
-#colorOrange {background-color: #ff9d68; }
-#colorPink {background-color: #f97599; }
-#colorFuchsia {background-color: #dd7fd3; }
-#colorPurple {background-color: #9595d2; }
-#colorBlue {background-color: #8bb8e8; }
-#colorGreen {background-color: #64ccc9; }
-#colorGray {background-color: #888b8d; }
 </style>
+
+<body id="edit">
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
@@ -51,13 +28,13 @@ footer p {margin: 1em 0; }
 </header>
 
 <div class="mdl-layout__drawer">
-<span class="mdl-layout__title">LuLaRizer</span>
+<span class="mdl-layout__title"><a href="./">LuLaRizer</a></span>
 <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
-    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
-    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
-    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
-    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -138,6 +115,7 @@ function buildStyleUI() {
     var selStyle = document.getElementById('selectStyle'),
         iStyle = localStorage.style || 0,
         option;
+    //console.log(localStorage.style);
 
     for (style in styleData) {
         if (styleData.hasOwnProperty(style)) {
@@ -307,12 +285,12 @@ function init() {
         color = localStorage.color;
     } else {
         color = 'colorYellow';
+        localStorage.color = color;
     }
-
     document.getElementById(color).className = 'selectedColor'
 
     if (localStorage.style && styleData[localStorage.style]) {
-        style = localStorage.style;
+        //style = localStorage.style;
     } else {
         localStorage.style = 0;
     }

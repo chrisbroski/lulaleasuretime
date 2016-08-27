@@ -5,26 +5,9 @@
 <title>Audit Inventory</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
-<style>
-#inventory img {width: 90px; margin: 4px; }
-h3 {
-    font-family: steelfish;
-    text-transform: capitalize;
-}
-.selected {
-    box-shadow: 2px 2px 8px black;
-    position: relative;
-    top: -1px; left: -1px;
-}
-#styles {
-    margin: 8px 8px 4px;
-    text-transform: capitalize;
-    font-size: 24px;
-    width: 95%;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="mdl/main.css">
+
+<body id="audit">
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
@@ -35,13 +18,13 @@ h3 {
 </header>
 
 <div class="mdl-layout__drawer">
-<span class="mdl-layout__title">LuLaRizer</span>
+<span class="mdl-layout__title"><a href="./">LuLaRizer</a></span>
 <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
-    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
-    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
-    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
-    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -117,7 +100,7 @@ function createStyleDropdown() {
         invObj = {};
     }
 
-    selectStyle.id = 'styles';
+    selectStyle.id = 'selectStyles';
     for (style in invObj) {
         if (invObj.hasOwnProperty(style)) {
             if (invObj[style].length > 0) {
@@ -145,7 +128,7 @@ function createStyleDropdown() {
 function loadPhotos() {
     var invString = localStorage.inventory,
         invList = document.getElementById('inventory'),
-        selectStyle = document.getElementById('styles'),
+        selectStyle = document.getElementById('selectStyles'),
         card,
         cardTitle,
         photo,
