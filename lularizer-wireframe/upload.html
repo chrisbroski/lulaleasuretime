@@ -126,7 +126,7 @@ function loadPhotos() {
 function load() {
     loadPhotos();
     touchclick(document.getElementById('inventory'), selectPhoto);
-    document.getElementById('uploadSelected').onclick = upload;
+    touchclick(document.getElementById('uploadSelected'), upload);
 }
 
 window.onload = load;

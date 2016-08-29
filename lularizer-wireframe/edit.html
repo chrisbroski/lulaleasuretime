@@ -289,21 +289,19 @@ function init() {
     }
     document.getElementById(color).className = 'selectedColor'
 
-    if (localStorage.style && styleData[localStorage.style]) {
-        //style = localStorage.style;
-    } else {
+    if (!localStorage.style) {
         localStorage.style = 0;
     }
+    buildStyleUI();
 }
 
 function load() {
-    buildStyleUI();
+    init();
     document.getElementById('selectStyle').onchange = changeStyle;
     document.getElementById('selectSize').onchange = changeSize;
     touchclick(document.getElementById('colors'), changeColor);
     document.getElementById('watermark').onchange = lularize;
 
-    init();
     window.setTimeout(lularize, 50);
 }
 

@@ -206,7 +206,8 @@ function loadPhotos(type) {
             }
         }
     }
-    invList.onclick = selectPhoto;
+    //invList.onclick = selectPhoto;
+    touchclick(invList, selectPhoto);
 }
 
 function showActions(e) {
@@ -244,25 +245,26 @@ function load() {
     loadPhotos('inventory');
     loadPhotos('sold');
     loadPhotos('deleted');
-    document.getElementById('markSold').onclick = function () {
-        movePhoto('inventory', 'sold');
-    };
-    document.getElementById('markDeleted').onclick = function () {
-        movePhoto('inventory', 'deleted');
-    };
-    document.getElementById('markSoldDeleted').onclick = function () {
-        movePhoto('sold', 'deleted');
-    };
-    document.getElementById('moveCurrent').onclick = function () {
-        movePhoto('sold', 'inventory');
-    };
-    document.getElementById('moveDeletedCurrent').onclick = function () {
-        movePhoto('deleted', 'inventory');
-    };
-    document.getElementById('cleanUpAll').onclick = cleanAll;
-    document.getElementById('cleanUpSelected').onclick = cleanSelected;
 
-    document.querySelector('.mdl-tabs__tab-bar').onclick = showActions;
+    touchclick(document.getElementById('markSold'), unction () {
+        movePhoto('inventory', 'sold');
+    });
+    touchclick(document.getElementById('markDeleted'), unction () {
+        movePhoto('inventory', 'deleted');
+    });
+    touchclick(document.getElementById('markSoldDeleted'), unction () {
+        movePhoto('sold', 'deleted');
+    });
+    touchclick(document.getElementById('moveCurrent'), unction () {
+        movePhoto('sold', 'inventory');
+    });
+    touchclick(document.getElementById('moveDeletedCurrent'), unction () {
+        movePhoto('deleted', 'inventory');
+    });
+    touchclick(document.getElementById('cleanUpAll'), cleanAll);
+    touchclick(document.getElementById('cleanUpSelected'), cleanSelected);
+
+    touchclick(document.querySelector('.mdl-tabs__tab-bar'), showActions);
 }
 
 window.onload = load;

@@ -172,7 +172,8 @@ function loadPhotos() {
 function load() {
     createStyleDropdown();
     loadPhotos();
-    document.getElementById('markSold').onclick = markSold;
+    //document.getElementById('markSold').onclick = markSold;
+    touchclick(document.getElementById('markSold'), markSold);
 }
 
 window.onload = load;
