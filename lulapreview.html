@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<title>LuLaRizer Closeup Preview</title>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+<style>
+* {
+    box-sizing: border-box;
+}
+body {font-family: sans-serif; }
+#photo_preview {
+    background: #ddd;
+    width: 306px; height: 408px;
+    position: relative;
+}
+#photo_preview div {
+    margin: -36px 0 0 -36px;
+    border: 1px dotted #000;
+    width: 71px; height: 71px;
+    position: absolute;
+    top: 50%; left: 50%;
+    cursor: move;
+}
+</style>
+
+<body>
+
+<article>
+<h1>LuLaRizer Closeup Preview</h1>
+
+<p><span id="left_percent">50</span>%, <span id="top_percent">50</span>%
+
+<div id="photo_preview"><div></div></div>
+
+</article>
+
+<script>
+var moving = false;
+window.onmousemove = function (e) {
+    var targ = e.target,
+        //rect = targ.getBoundingClientRect(),
+        container = document.getElementById('photo_preview'),
+        aimer = document.querySelector('#photo_preview div'),
+        rectContainer = container.getBoundingClientRect(),
+        rectAimer = targ.getBoundingClientRect(),
+        leftPos = e.pageX - rectContainer.left,
+        topPos = e.pageY - rectContainer.top,
+        left_percent,
+        top_percent = 49;
+
+    if (leftPos < rectAimer.width / 2) {
+        leftPos = rectAimer.width / 2;
+    }
+    if (leftPos > rectContainer.width - rectAimer.width / 2) {
+        leftPos = rectContainer.width - rectAimer.width / 2;
+    }
+    left_percent = 100 * leftPos / rectContainer.width;
+
+    if (topPos < 1 + rectAimer.height / 2) {
+        topPos = 1 + rectAimer.height / 2;
+    }
+    if (topPos > 1 + rectContainer.height - rectAimer.height / 2) {
+        topPos = 1 + rectContainer.height - rectAimer.height / 2;
+    }
+    top_percent = 100 * topPos / rectContainer.height;
+
+    if (moving) {
+        aimer.style.left = leftPos + 'px';
+        aimer.style.top = topPos + 'px';
+
+        document.getElementById('left_percent').textContent = left_percent.toFixed();
+        document.getElementById('top_percent').textContent = top_percent.toFixed();
+    }
+};
+
+document.querySelector('#photo_preview div').onmousedown = function (e) {
+    moving = true;
+};
+
+document.querySelector('body').onmouseup = function (e) {
+    moving = false;
+};
+
+document.querySelector('body').onmouseout = function (e) {
+    moving = false;
+};
+
+</script>

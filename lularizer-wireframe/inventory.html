@@ -1,30 +1,13 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
 <title>Manage Inventory</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
-<style>
-#inventory img {width: 90px; margin: 4px; }
-h3 {
-    font-family: steelfish;
-    text-transform: capitalize;
-}
-.selected {
-    box-shadow: 2px 2px 8px black;
-    position: relative;
-    top: -1px; left: -1px;
-}
+<link rel="stylesheet" type="text/css" href="mdl/main.css">
 
-#markSoldDeleted, #moveCurrent, #cleanUpAll, #cleanUpSelected, #moveDeletedCurrent {
-    display: none;
-}
-
-</style>
-
-<body>
+<body id="manage">
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header mdl-tabs mdl-js-tabs">
 
@@ -35,13 +18,13 @@ h3 {
 </header>
 
 <div class="mdl-layout__drawer">
-<span class="mdl-layout__title">LuLaRizer</span>
+<span class="mdl-layout__title"><a href="./">LuLaRizer</a></span>
 <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
-    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
-    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
-    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
-    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -223,7 +206,8 @@ function loadPhotos(type) {
             }
         }
     }
-    invList.onclick = selectPhoto;
+    //invList.onclick = selectPhoto;
+    touchclick(invList, selectPhoto);
 }
 
 function showActions(e) {
@@ -261,25 +245,26 @@ function load() {
     loadPhotos('inventory');
     loadPhotos('sold');
     loadPhotos('deleted');
-    document.getElementById('markSold').onclick = function () {
-        movePhoto('inventory', 'sold');
-    };
-    document.getElementById('markDeleted').onclick = function () {
-        movePhoto('inventory', 'deleted');
-    };
-    document.getElementById('markSoldDeleted').onclick = function () {
-        movePhoto('sold', 'deleted');
-    };
-    document.getElementById('moveCurrent').onclick = function () {
-        movePhoto('sold', 'inventory');
-    };
-    document.getElementById('moveDeletedCurrent').onclick = function () {
-        movePhoto('deleted', 'inventory');
-    };
-    document.getElementById('cleanUpAll').onclick = cleanAll;
-    document.getElementById('cleanUpSelected').onclick = cleanSelected;
 
-    document.querySelector('.mdl-tabs__tab-bar').onclick = showActions;
+    touchclick(document.getElementById('markSold'), unction () {
+        movePhoto('inventory', 'sold');
+    });
+    touchclick(document.getElementById('markDeleted'), unction () {
+        movePhoto('inventory', 'deleted');
+    });
+    touchclick(document.getElementById('markSoldDeleted'), unction () {
+        movePhoto('sold', 'deleted');
+    });
+    touchclick(document.getElementById('moveCurrent'), unction () {
+        movePhoto('sold', 'inventory');
+    });
+    touchclick(document.getElementById('moveDeletedCurrent'), unction () {
+        movePhoto('deleted', 'inventory');
+    });
+    touchclick(document.getElementById('cleanUpAll'), cleanAll);
+    touchclick(document.getElementById('cleanUpSelected'), cleanSelected);
+
+    touchclick(document.querySelector('.mdl-tabs__tab-bar'), showActions);
 }
 
 window.onload = load;

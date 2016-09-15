@@ -1,15 +1,13 @@
 <!doctype html>
 <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
 <title>Lularizer</title>
 <link rel="stylesheet" href="mdl/material.lime-pink.min.css">
 <script src="mdl/material.min.js"></script>
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-<link rel="stylesheet" type="text/css" href="mdl/mdl-custom.css">
-<style>
+<link rel="stylesheet" type="text/css" href="mdl/main.css">
 
-</style>
-<body>
+<body id="home">
 
 <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
 
@@ -20,13 +18,13 @@
 </header>
 
 <div class="mdl-layout__drawer">
-<span class="mdl-layout__title">LuLaRizer</span>
+<span class="mdl-layout__title"><a href="./">LuLaRizer</a></span>
 <nav class="mdl-navigation">
-    <a class="mdl-navigation__link" href="#new" id="navNew">Add From Camera</a>
-    <a class="mdl-navigation__link" href="#collection" id="navCollection">Add From Collection</a>
-    <a class="mdl-navigation__link" href="#inventory" id="navInventory">Manage Inventory</a>
-    <a class="mdl-navigation__link" href="#audit" id="navAudit">Inventory Audit</a>
-    <a class="mdl-navigation__link" href="#upload" id="navUpload">Upload to Facebook</a>
+    <a class="mdl-navigation__link" href="new" id="navNew">Add From Camera</a>
+    <a class="mdl-navigation__link" href="collection" id="navCollection">Add From Collection</a>
+    <a class="mdl-navigation__link" href="inventory" id="navInventory">Manage Inventory</a>
+    <a class="mdl-navigation__link" href="audit" id="navAudit">Inventory Audit</a>
+    <a class="mdl-navigation__link" href="upload" id="navUpload">Upload to Facebook</a>
 </nav>
 </div>
 
@@ -37,7 +35,7 @@
 The LuLaRizer helps LuLaRoe fashion consultants share and manage inventory with clear, high-quality photos.
 </div>
 </div>
-<a class="mdl-button mdl-button--fab mdl-button--colored mdl-shadow--8dp" href="new" onclick="location='new'; return false; "><i class="material-icons">camera_enhance</i></a>
+<a class="mdl-button mdl-button--fab mdl-button--colored mdl-shadow--8dp" href="new" onclick="location='new'; return false; ">+</a>
 </main>
 
 </div>
