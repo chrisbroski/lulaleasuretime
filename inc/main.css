@@ -59,9 +59,6 @@ section p a:visited, section p a:hover {
 section p a i {
     float: left;
 }
-#swiftorder a i {
-    font-family: sans-serif;
-}
 
 #links p a:hover {background: #888b8d; }
 #swiftorder a {background: #ff9d68; }
