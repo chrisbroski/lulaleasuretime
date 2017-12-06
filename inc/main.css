@@ -27,8 +27,9 @@ article h1 {text-align: center; }
 article h2 {text-align: center; }
 
 section {
-    float: right;
-    width: 400px;
+    padding-left: 32px;
+    float: left;
+    width: 368px;
 }
 section h3 {
     margin: 0;
@@ -40,7 +41,6 @@ section h3 {
 }
 section p {
     margin: 12px 0;
-    padding-right: 32px;
     font-family: steelfish;
     font-size: 24px;
     letter-spacing: 0.05em;
